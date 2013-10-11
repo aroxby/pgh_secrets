@@ -1,0 +1,43 @@
+table, tr, td, th
+{
+	border: 1px solid black;
+}
+.centered
+{
+	display: block;
+	margin: auto;
+	text-align: center;
+}
+.errortext, .deletetext
+{
+	font-weight: bold;
+	color: red;
+	text-decoration: none;
+}
+.successText
+{
+	font-weight: bold;
+	color: green;
+}
+.zoomtext
+{
+	font-weight: bold;
+	color: blue;
+	text-decoration: none;
+}
+.refreshBtn
+{
+	vertical-align: top;
+	display:block;
+}
+pre
+{
+	white-space: normal;
+}
+@-moz-document url-prefix()
+{
+	table
+	{
+		border: 0px;
+	}
+}
