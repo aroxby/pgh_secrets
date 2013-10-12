@@ -90,7 +90,7 @@ $stmt = $db->prepare("select rowID, userID, lat, lng, timestamp from quarters or
 echo "<div class=\"centered\">\n";
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
-echo "<tr><th></th><th>User ID</th><th>Latitude</th><th>Longitute</th><th>Timestamp</th>";
+echo "<tr><th></th><th>User ID</th><th>Latitude</th><th>Longitude</th><th>Timestamp</th>";
 echo "</tr>\n";
 
 $stmt->execute();

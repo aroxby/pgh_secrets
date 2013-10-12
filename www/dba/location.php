@@ -52,28 +52,28 @@ if(is_numeric($_POST['removeRow']))
 
 if($_POST['lat']!='' && $_POST['lng']!='')
 {
-	$stmt = $db->prepare("insert into $table(lat, lng, name, latSin, latCos) values (?, ?, ?, ?, ?)");
-	$stmt->bind_param( 'ddsdd', $_POST['lat'], $_POST['lng'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])) );
+	$stmt = $db->prepare("insert into $table(lat, lng, radius, name, latSin, latCos) values (?, ?, ?, ?, ?, ?)");
+	$stmt->bind_param( 'dddsdd', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])) );
 	$stmt->execute();
 	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error inserting rows!</div>\n";
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, lat, lng, name, description, latSin, latCos from $table");
+$stmt = $db->prepare("select id, lat, lng, radius, name, description, latSin, latCos from $table");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
-echo "<tr><th></th><th>ID</th><th>Latitude</th><th>Longitute</th><th>Name</th><th>Description</th><th>sin</th><th>cos</th>";
+echo "<tr><th></th><th>ID</th><th>Latitude</th><th>Longitude</th><th>Radius</th><th>Name</th><th>Description</th><th>sin</th><th>cos</th>";
 echo "<td></td></tr>\n";
 
 $stmt->execute();
-$stmt->bind_result($id, $lat, $lng, $name, $desc, $sin, $cos);
+$stmt->bind_result($id, $lat, $lng, $radius, $name, $desc, $sin, $cos);
 
 while($stmt->fetch())
 {
 	echo "<tr>".
 	"<td><a class=\"zoomtext\" href=\"javascript:void(0)\" onclick=\"zoomMap($lat, $lng)\">+</td>".
-	"<td>$id</td><td>$lat</td><td>$lng</td><td>$name</td><td>$desc</td><td>$sin</td><td>$cos</td>".
+	"<td>$id</td><td>$lat</td><td>$lng</td><td>$radius</td><td>$name</td><td>$desc</td><td>$sin</td><td>$cos</td>".
 	"<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeRow($id)\">X</a></td>".
 	"</tr>\n";
 }
@@ -90,7 +90,8 @@ $db->close();
 <table>
 <tr><td>Name</td><td><input name="name" type="text" size="50"/ ></td></tr>
 <tr><td>Latitude</td><td><input name="lat" type="text" size="50" /></td></tr>
-<tr><td>Longitute</td><td><input name="lng" type="text" size="50" /></td></tr>
+<tr><td>Longitude</td><td><input name="lng" type="text" size="50" /></td></tr>
+<tr><td>Radius (meters)</td><td><input name="radius" type="text" size="50" /></td></tr>
 </table>
 <input type="submit"/>
 </form>

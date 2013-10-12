@@ -1,23 +1,23 @@
 <?php
-//this is a debugging one
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
-$db = connectDB();
-$result['OK'] = 1;
-$result['error'] = "No error.";
-
 if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['userID']!=''){
+	$db = connectDB();
+	$result['OK'] = 1;
+	$result['error'] = "No error.";
 	
-	//echo acos(sin(deg2rad($lattest))*sin(deg2rad(40.428251))+cos(deg2rad($lattest))*cos(deg2rad(40.428251)) * cos(deg2rad(-79.970312) - deg2rad($lngtest)))* 6371;
+	$stmt = $db->prepare("insert ignore into checkin(userID, missionID, lat, lng) values (?, ?, ?, ?)");
+	$stmt->bind_param('iidd', $_POST['userID'], $_POST['missionID'], $_POST['lat'],$_POST['lng']);
+	$stmt->execute();
+	$stmt->close();
 	
-	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationOrder, location.radius from location,".
-	"missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id ".
-	"and (ACOS(SIN(?)*SIN(RADIANS(location.lat))+COS(?)*COS(RADIANS(location.lat))*COS(RADIANS(location.lng)-?))*6371) < location.radius ORDER BY missionlocation.locationOrder ASC");
+	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationOrder, location.radius ".
+	"from location missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id ".
+	"and (ACOS(SIN(?)*latsin+COS(?)*latcos*COS(radians(lng)-?))*6371000) < location.radius ORDER BY missionlocation.locationOrder ASC");
 	
 	$stmt->bind_param('iddd', $_POST['missionID'], deg2rad($_POST['lat']), deg2rad($_POST['lat']), deg2rad($_POST['lng']));
-	//$stmt->bind_param('iddd', $mIDtest, deg2rad($lattest), deg2rad($lattest), deg2rad($lngtest));
 	$stmt->execute();
-	$stmt->bind_result($lat,$lng, $order, $radius);
+	$stmt->bind_result($lat,$lng, $order, $radius, $latsin, $latcos);
 	
 	$stmt_rows = array();
 	while($stmt->fetch()){
@@ -25,15 +25,15 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	}
 	$stmt->close();
 	
-	//get progress from usermission	
-	$stmtProgress = $db->prepare("SELECT progress FROM usermission WHERE missionID=? AND userID=?");	
+	//get progress from usermission
+	$stmtProgress = $db->prepare("SELECT progress FROM usermission WHERE missionID=? AND userID=?");
 	$stmtProgress->bind_param('ii',  $_POST['missionID'],$_POST['userID']);
 	//$stmtProgress->bind_param('ii',  $mIDtest, $uIDtest);
 	$stmtProgress->execute();
 	$stmtProgress->bind_result($progressTEMP);
 	
 	while($stmtProgress->fetch()){
-		$progress = $progressTEMP;			
+		$progress = $progressTEMP;
 	}
 	$stmtProgress->close();
 	
@@ -48,25 +48,25 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 		$mask = 0x1<<$temp[2];
 		
 		if(($mask & $progress) == 0){
-			$progress |= $mask;			
+			$progress |= $mask;
 			//update progress
 			$stmtUpdate = $db->prepare("UPDATE usermission SET progress = progress|? WHERE missionID=? AND userID=?");
 			$stmtUpdate->bind_param('idd', $mask, $_POST['missionID'],$_POST['userID']);
 			//$stmtUpdate->bind_param('idd', $mask, $mIDtest,$uIDtest);
 			$stmtUpdate->execute();
-			if($stmtUpdate->affected_rows<=0){					
+			if($stmtUpdate->affected_rows<=0){
 			$result['update'] = 0;
 			}
-			else{			
+			else{
 				$result['update'] = 1;
 				$result[] = $next;
 			}
-			$stmtUpdate->close();			
+			$stmtUpdate->close();
 		}
 		else{
 			$result['update'] = 0;
 		}
-	}	
+	}
 	$result['complete'] = 0;
 		
 	//check if mission completes
@@ -85,10 +85,13 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 		$result['complete'] = 0;//playe haven't met the basic requirement
 	}
 	*/
+	$db->close();
+}
+else
+{
+	$result['OK'] = 0;
+	$result['error'] = "Not enough data";
 }
 
-$db->close();
 echo '['.json_encode($result).']';
 ?>
-
-

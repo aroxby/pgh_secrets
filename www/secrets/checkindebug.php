@@ -7,18 +7,18 @@ $result['OK'] = 1;
 $result['error'] = "No error.";
 
 //test only
-$lattest = 40.428378;
-$lngtest = -79.971449;
+$lattest = 40.432787;
+$lngtest = -79.964728;
 $mIDtest = 1;
 $uIDtest = 1;
 
 //if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['userID']!=''){
 	
-	//echo acos(sin(deg2rad($lattest))*sin(deg2rad(40.428251))+cos(deg2rad($lattest))*cos(deg2rad(40.428251)) * cos(deg2rad(-79.970312) - deg2rad($lngtest)))* 6371;
+	//echo acos(sin(deg2rad($lattest))*sin(deg2rad(40.428251))+cos(deg2rad($lattest))*cos(deg2rad(40.428251)) * cos(deg2rad(-79.970312) - deg2rad($lngtest)))* 6371000;
 	
 	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationOrder, location.radius from location,".
 	"missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id ".
-	"and (ACOS(SIN(?)*SIN(RADIANS(location.lat))+COS(?)*COS(RADIANS(location.lat))*COS(RADIANS(location.lng)-?))*6371) < location.radius ORDER BY missionlocation.locationOrder ASC");
+	"and (ACOS(SIN(?)*SIN(RADIANS(location.lat))+COS(?)*COS(RADIANS(location.lat))*COS(RADIANS(location.lng)-?))*6371000) < location.radius ORDER BY missionlocation.locationOrder ASC");
 	
 	//$stmt->bind_param('iddd', $_POST['missionID'], deg2rad($_POST['lat']), deg2rad($_POST['lat']), deg2rad($_POST['lng']));
 	$stmt->bind_param('iddd', $mIDtest, deg2rad($lattest), deg2rad($lattest), deg2rad($lngtest));

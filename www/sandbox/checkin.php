@@ -56,7 +56,7 @@ function checkSubmit(e)
 	}
 }
 
-nextID = 2;
+nextID = 4;
 </script>
 </head>
 
@@ -67,19 +67,25 @@ nextID = 2;
 <form id="userForm" method="post" action="/secrets/missionactivate.php" onKeyPress="checkSubmit(event)" target="_blank">
 <form id="userForm" method="post" action="/sandbox/post.php" onKeyPress="checkSubmit(event)" target="_blank">
 -->
-<form id="userForm" method="post" action="/secrets/missionactivate.php" onKeyPress="checkSubmit(event)" target="_blank">
+<form id="userForm" method="post" action="/secrets/checkin.php" onKeyPress="checkSubmit(event)" target="_blank">
 <div id="dataTableMaster">
-<table class="bordered"><tr><td>Action</td><td><input type="text" readonly="readonly" size="30" value="/secrets/missionactivate.php" / ></td></tr></table>
+<table class="bordered"><tr><td>Action</td><td><input type="text" readonly="readonly" size="30" value="/secrets/checkin.php" / ></td></tr></table>
 <div id="dataTable0">
 <table class="bordered"><tr><td>Name</td><td><input type="text" id="name0" size="30" value="userID"/ ></td><td>Value</td><td><input id="value0" type="text" size="30" onfocus="checkCreate(0)" value="2"/ ></td></tr></table>
 </div>
 <div id="dataTable1">
-<table class="bordered"><tr><td>Name</td><td><input type="text" id="name1" size="30" value="missionID" / ></td><td>Value</td><td><input id="value1" type="text" size="30" onfocus="checkCreate(1)" value="1" / ></td></tr></table>
+<table class="subbordered"><tr><td>Name</td><td><input type="text" id="name1" size="30" value="missionID" / ></td><td>Value</td><td><input id="value1" type="text" size="30" onfocus="checkCreate(1)" value="1" / ></td></tr></table>
 </div>
 <div id="dataTable2">
-<table class="bordered"><tr><td>Name</td><td><input type="text" id="name2" size="30" / ></td><td>Value</td><td><input id="value2" type="text" size="30" onfocus="checkCreate(2)" / ></td></tr></table>
+<table class="subbordered"><tr><td>Name</td><td><input type="text" id="name2" size="30" value="lat" / ></td><td>Value</td><td><input id="value2" type="text" size="30" onfocus="checkCreate(2)" value="40.432691" / ></td></tr></table>
 </div>
-<div id="dataTable3"></div>
+<div id="dataTable3">
+<table class="subbordered"><tr><td>Name</td><td><input type="text" id="name3" size="30" value="lng" / ></td><td>Value</td><td><input id="value3" type="text" size="30" onfocus="checkCreate(3)" value="-79.964586" / ></td></tr></table>
+</div>
+<div id="dataTable4">
+<table class="subbordered"><tr><td>Name</td><td><input type="text" id="name4" size="30" / ></td><td>Value</td><td><input id="value4" type="text" size="30" onfocus="checkCreate(4)" / ></td></tr></table>
+</div>
+<div id="dataTable5"></div>
 </div>
 <input type="button" class="leftAlign" value="Submit" onClick="doSubmit()" />
 </form>

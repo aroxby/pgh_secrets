@@ -50,7 +50,7 @@ if($_POST['mid']!='')
 {
 	$stmt = $db->prepare("insert into $table(missionID, locationID, locationOrder, showOnMap) values (?, ?, ?, ?)");
 	$stmt->bind_param( 'iiii', $_POST['mid'], $_POST['lid'], $_POST['order'], $shown);
-	$shown = is_numeric($_POST['shown']);
+	$shown = isset($_POST['shown']);
 	$stmt->execute();
 	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error inserting rows: ".htmlspecialchars($db->error)."</div>\n";
 	$stmt->close();

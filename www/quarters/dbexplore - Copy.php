@@ -116,7 +116,7 @@ $stmt = $db->prepare("select rowID, userID, lat, lng, timestamp from quarters");
 echo "<div class=\"centered\">\n";
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
-echo "<tr><th></th><th>User ID</th><th>Latitude</th><th>Longitute</th><th>Timestamp</th>";
+echo "<tr><th></th><th>User ID</th><th>Latitude</th><th>Longitude</th><th>Timestamp</th>";
 echo "<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeAll()\">X</a></td></tr>\n";
 
 $stmt->execute();
@@ -150,7 +150,7 @@ $db->close();
 	<td>Timestamp</td><td><input type="text" disabled="disabled" value="<?echo date("Y-m-d H:i:s"); ?>" /></td>
 </tr><tr>
 	<td>Latitude</td><td><input name="lat" type="text" /></td>
-	<td>Longitute</td><td><input name="lng" type="text" /></td>	
+	<td>Longitude</td><td><input name="lng" type="text" /></td>	
 </tr>
 </table>
 <input class="centered" type="submit"/>
