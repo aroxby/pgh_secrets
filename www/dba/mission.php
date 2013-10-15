@@ -9,7 +9,7 @@ header("Pragma: no-cache");
 <!DOCTYPE html>
 <html>
 <head>
-<title>Pittsburgh Challenge Database</title>
+<title>Mission - Pittsburgh Challenge Database</title>
 <link rel="stylesheet" type="text/css" href="dba.css">
 <script type="text/javascript">
 function removeRow(id)
@@ -46,7 +46,7 @@ if(is_numeric($_POST['removeRow']))
 
 if($_POST['name']!='')
 {
-	$stmt = $db->prepare("insert into $table(name, description, tags, imageURI, locationsOrdered, startDate, endDate, minuteLimit, badgeName, badgeImageURI) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$stmt = $db->prepare("insert into $table(name, description, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName, badgeImageURI) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	$stmt->bind_param(
 		'ssssississ', $_POST['name'], $_POST['desc'], $_POST['tags'], $_POST['imgURI'], $orderd,
 		$_POST['startdate'], $_POST['enddate'], $_POST['limit'],
@@ -58,24 +58,23 @@ if($_POST['name']!='')
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, name, description, tags, imageURI, locationsOrdered, startDate, endDate, minuteLimit, badgeName, badgeImageURI from $table");
+$stmt = $db->prepare("select id, name, description, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName, badgeImageURI from $table");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
 echo "<tr><th>ID</th><th>Name</th><th>Description</th><th>Tags</th>".
-"<th>Image URI</th><th>Locations Ordered</th>".
+"<th>Locations Ordered</th>".
 "<th>Start Date</th><th>End Date</th><th>Time Limit</th>".
 "<th>Badge Name</th><th>Badge Image URI</th>";
 echo "<td></td></tr>\n";
 
 $stmt->execute();
-$stmt->bind_result($id, $name, $desc, $tags, $imgURI, $ordered, $startdate, $enddate , $limit, $badge, $badgeURI);
+$stmt->bind_result($id, $name, $desc, $tags, $ordered, $startdate, $enddate , $limit, $badge, $badgeURI);
 
 while($stmt->fetch())
 {
 	echo "<tr>".
-	"<td>$id</td><td>$name</td><td><pre>".htmlspecialchars($desc)."</pre></td><td>$tags</td>".
-	"<td><a href=\"$imgURI\" target=\"_blank\">$imgURI</a></td>";
+	"<td>$id</td><td>$name</td><td><pre>".htmlspecialchars($desc)."</pre></td><td>$tags</td>";
 	if(is_numeric($ordered) && $ordered>0) echo "<td><input type=\"checkbox\" disabled=\"disabled\" checked=\"checked\"/></td>";
 	else echo "<td><input type=\"checkbox\" disabled=\"disabled\" /></td>";
 	echo "<td>$startdate</td><td>$enddate</td><td>$limit</td><td>$badge</td>".
@@ -98,7 +97,6 @@ $db->close();
 <tr><td colspan="2">Description</td></tr>
 <tr><td colspan="2"><textarea name="desc" rows="10" style="width:98.5%"></textarea></td></tr>
 <tr><td>Tags (Comma Seperated)</td><td><input name="tags" type="text" size="50" /></td></tr>
-<tr><td>Image URI</td><td><input name="imgURI" type="text" size="50" /></td></tr>
 <tr><td>Locations Orderd</td><td><input name="ordered" type="checkbox" /></td></tr>
 <tr><td>Start Date</td><td><input name="startdate" type="date" /></td></tr>
 <tr><td>End Date</td><td><input name="enddate" type="date" /></td></tr>

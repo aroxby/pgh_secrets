@@ -9,7 +9,7 @@ header("Pragma: no-cache");
 <!DOCTYPE html>
 <html>
 <head>
-<title>Pittsburgh Challenge Database</title>
+<title>Crypto - Pittsburgh Challenge Database</title>
 <link rel="stylesheet" type="text/css" href="dba.css">
 <script type="text/javascript" src="/scripts/sha256.js"></script>
 <script type="text/javascript">

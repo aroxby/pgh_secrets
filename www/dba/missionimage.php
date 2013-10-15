@@ -9,13 +9,13 @@ header("Pragma: no-cache");
 <!DOCTYPE html>
 <html>
 <head>
-<title>UserMission - Pittsburgh Challenge Database</title>
+<title>MissionImage - Pittsburgh Challenge Database</title>
 <link rel="stylesheet" type="text/css" href="dba.css">
+<script type="text/javascript" src="/scripts/sha256.js"></script>
 <script type="text/javascript">
-function removeRow(uid, mid)
+function removeRow(id)
 {
-	document.getElementsByName("removeUID")[0].value = uid;
-	document.getElementsByName("removeMID")[0].value = mid;
+	document.getElementsByName("removeRow")[0].value = id;
 	document.getElementById("removalFrm").submit();
 }
 
@@ -29,46 +29,47 @@ function refreshPage()
 
 <?php
 $db = new mysqli("localhost", "pgh-challenge", "5NdSW4FaAqQXthqs", "game");
-$table = "usermission";
+$table = "missionimage";
 if(mysqli_connect_errno())
 {
 	echo "<h3>Database error. Try again later.</h3>\n</body></html>";
 	Die();
 }
 
-if(is_numeric($_POST['removeUID']))
+if(is_numeric($_POST['removeRow']))
 {
-	$stmt = $db->prepare("delete from $table where userID = ? and missionID = ?");
-	$stmt->bind_param('ii', $_POST['removeUID'], $_POST['removeMID']);
+	$stmt = $db->prepare("delete from $table where id = ?");
+	$stmt->bind_param('i', $_POST['removeRow']);
 	$stmt->execute();
 	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error removing rows: ".htmlspecialchars($db->error)."</div>\n";
 	$stmt->close();
 }
 
-if($_POST['uid']!='')
+if($_POST['imguri']!='')
 {
-	$stmt = $db->prepare("insert into $table(userID, missionID, progress) values (?, ?, ?)");
-	$stmt->bind_param( 'iii', $_POST['uid'], $_POST['mid'], bindec($_POST['progress']));
+	$stmt = $db->prepare("insert into $table(missionID, imageURI) values (?, ?)");
+	$stmt->bind_param( 'is', $_POST['mid'], $_POST['imguri'] );
 	$stmt->execute();
 	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error inserting rows: ".htmlspecialchars($db->error)."</div>\n";
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select userID, missionID, BIN(progress+0) from $table");
+$stmt = $db->prepare("select id, missionID, imageURI from $table");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
-echo "<tr><th>User ID</th><th>Mission ID</th><th>Progress</th>";
+echo "<tr><th>Row ID</th><th>Mission ID</th><th>Image URI</th>";
 echo "<td></td></tr>\n";
 
 $stmt->execute();
-$stmt->bind_result($uid, $mid, $progress);
+$stmt->bind_result($id, $mid, $imguri);
 
 while($stmt->fetch())
 {
 	echo "<tr>".
-	"<td>$uid</td><td>$mid</td><td>$progress</td>".
-	"<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeRow($uid, $mid)\">X</a></td>".
+	"<td>$id</td><td>$mid</td>".
+	"<td><a href=\"$imguri\" target=\"_blank\">$imguri</a></td>".
+	"<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeRow($id)\">X</a></td>".
 	"</tr>\n";
 }
 echo "</table>\n";
@@ -79,18 +80,16 @@ $db->close();
 
 <hr/>
 
-<form method="post" action="usermission.php">
+<form method="post" action="missionimage.php">
 <table>
-<tr><td>User ID</td><td><input name="uid" type="text" /></td></tr>
-<tr><td>Mission ID</td><td><input name="mid" type="text" / ></td></tr>
-<tr><td>Progress</td><td><input name="progress" type="text" /></td></tr>
+<tr><td>Mission ID</td><td><input name="mid" type="text" size="50"/ ></td></tr>
+<tr><td>Image URI</td><td><input name="imguri" type="text" size="50" /></td></tr>
 </table>
-<input type="submit"/>
+<input type="Submit" />
 </form>
 
-<form id="removalFrm" method="post" action="usermission.php">
-<input type="hidden" name="removeUID" />
-<input type="hidden" name="removeMID" />
+<form id="removalFrm" method="post" action="missionimage.php">
+<input type="hidden" name="removeRow" />
 </form>
 
 </body>

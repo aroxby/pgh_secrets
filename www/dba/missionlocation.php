@@ -9,7 +9,7 @@ header("Pragma: no-cache");
 <!DOCTYPE html>
 <html>
 <head>
-<title>Pittsburgh Challenge Database</title>
+<title>MissionLocation - Pittsburgh Challenge Database</title>
 <link rel="stylesheet" type="text/css" href="dba.css">
 <script type="text/javascript">
 function removeRow(mid, lid, o)

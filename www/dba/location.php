@@ -9,8 +9,12 @@ header("Pragma: no-cache");
 <!DOCTYPE html>
 <html>
 <head>
-<title>Pittsburgh Challenge Database</title>
+<title>Location - Pittsburgh Challenge Database</title>
 <link rel="stylesheet" type="text/css" href="dba.css">
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBY1D4KC4Rs0dHqfab46Qi84BR3EisJ8xQ&sensor=false"></script>
+<script type="text/javascript" src="maps.js"></script>
+
 <script type="text/javascript">
 function removeRow(id)
 {
@@ -20,8 +24,7 @@ function removeRow(id)
 
 function zoomMap(lat, lng)
 {
-	var url = "http://maps.googleapis.com/maps/api/staticmap?zoom=13&size=300x300&maptype=roadmap&sensor=false&center="+lat+","+lng+"&markers=color:red%7C"+lat+","+lng;
-	document.getElementById("mapImage").src = url;
+	centerMap(lat, lng);
 }
 
 function refreshPage()
@@ -82,7 +85,6 @@ echo "</table>\n";
 $stmt->close();
 $db->close();
 ?>
-<img id="mapImage" src="http://maps.googleapis.com/maps/api/staticmap?zoom=10&size=300x300&maptype=roadmap&sensor=false&center=40.433160,-79.964940" />
 
 <hr/>
 
