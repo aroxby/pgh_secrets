@@ -1,0 +1,46 @@
+<?php
+//no  cache headers 
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+?>
+<html>
+<head>
+<title>JS Test</title>
+<script type="text/javascript">
+function loadScriptEZ(url, callback)
+{
+	var js = document.createElement("script");
+	js.type = "text/javascript";
+	js.src = url;
+	var head = document.getElementsByTagName('head')[0];
+	head.appendChild(js);
+	callback();
+}
+
+function loadScript(url, callback)
+{
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = url;
+
+	script.onreadystatechange = callback;
+	script.onload = callback;
+	
+	head.appendChild(script);
+}
+
+function callBubble()
+{
+	bubble();
+}
+
+loadScriptEZ("includeLarge.js", callBubble);
+</script>
+</head>
+<body>
+</body>
+</html>

@@ -46,11 +46,11 @@ if(is_numeric($_POST['removeRow']))
 
 if($_POST['name']!='')
 {
-	$stmt = $db->prepare("insert into $table(name, description, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName, badgeImageURI) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$stmt = $db->prepare("insert into $table(name, description, neighborhood, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	$stmt->bind_param(
-		'ssssississ', $_POST['name'], $_POST['desc'], $_POST['tags'], $_POST['imgURI'], $orderd,
+		'ssssissis', $_POST['name'], $_POST['desc'], $_POST['neighborhood'], $_POST['tags'], $orderd,
 		$_POST['startdate'], $_POST['enddate'], $_POST['limit'],
-		$_POST['badge'], $_POST['badgeURI']
+		$_POST['badge']
 	);
 	$orderd = isset($_POST['ordered']);
 	$stmt->execute();
@@ -58,27 +58,26 @@ if($_POST['name']!='')
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, name, description, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName, badgeImageURI from $table");
+$stmt = $db->prepare("select id, name, description, neighborhood, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName from $table");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
-echo "<tr><th>ID</th><th>Name</th><th>Description</th><th>Tags</th>".
+echo "<tr><th>ID</th><th>Name</th><th>Description</th><th>Neighborhood</th><th>Tags</th>".
 "<th>Locations Ordered</th>".
 "<th>Start Date</th><th>End Date</th><th>Time Limit</th>".
-"<th>Badge Name</th><th>Badge Image URI</th>";
+"<th>Badge Name</th>";
 echo "<td></td></tr>\n";
 
 $stmt->execute();
-$stmt->bind_result($id, $name, $desc, $tags, $ordered, $startdate, $enddate , $limit, $badge, $badgeURI);
+$stmt->bind_result($id, $name, $desc, $neighborhood, $tags, $ordered, $startdate, $enddate , $limit, $badge);
 
 while($stmt->fetch())
 {
 	echo "<tr>".
-	"<td>$id</td><td>$name</td><td><pre>".htmlspecialchars($desc)."</pre></td><td>$tags</td>";
+	"<td>$id</td><td>$name</td><td><pre>".htmlspecialchars($desc)."</pre></td><td>$neighborhood</td><td>$tags</td>";
 	if(is_numeric($ordered) && $ordered>0) echo "<td><input type=\"checkbox\" disabled=\"disabled\" checked=\"checked\"/></td>";
 	else echo "<td><input type=\"checkbox\" disabled=\"disabled\" /></td>";
 	echo "<td>$startdate</td><td>$enddate</td><td>$limit</td><td>$badge</td>".
-	"<td><a href=\"$badgeURI\" target=\"_blank\">$badgeURI</a></td>".
 	"<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeRow($id)\">X</a></td>".
 	"</tr>\n";
 }
@@ -93,16 +92,15 @@ $db->close();
 <form method="post" action="mission.php">
 <table>
 <tr><td>Name</td><td><input name="name" type="text" size="50"/ ></td></tr>
-
+<tr><td>Neighborhood</td><td><input name="neighborhood" type="text" size="50" /></td></tr>
+<tr><td>Tags (Comma Seperated)</td><td><input name="tags" type="text" size="50" /></td></tr>
 <tr><td colspan="2">Description</td></tr>
 <tr><td colspan="2"><textarea name="desc" rows="10" style="width:98.5%"></textarea></td></tr>
-<tr><td>Tags (Comma Seperated)</td><td><input name="tags" type="text" size="50" /></td></tr>
 <tr><td>Locations Orderd</td><td><input name="ordered" type="checkbox" /></td></tr>
 <tr><td>Start Date</td><td><input name="startdate" type="date" /></td></tr>
 <tr><td>End Date</td><td><input name="enddate" type="date" /></td></tr>
 <tr><td>Time Limit (in Minutes)</td><td><input name="limit" type="text" /></td></tr>
 <tr><td>badge Name</td><td><input name="badge" type="text" size="50" /></td></tr>
-<tr><td>Badge Image URI</td><td><input name="badgeURI" type="text" size="50" /></td></tr>
 </table>
 <input type="submit"/>
 </form>

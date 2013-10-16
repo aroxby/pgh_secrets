@@ -2,22 +2,17 @@ table, tr, td, th
 {
 	border: 1px solid black;
 }
-.centered
-{
-	display: block;
-	margin: auto;
-	text-align: center;
-}
 .errortext, .deletetext
 {
 	font-weight: bold;
 	color: red;
 	text-decoration: none;
 }
-.successText
+.successText, .copyText
 {
 	font-weight: bold;
 	color: green;
+	text-decoration: none;
 }
 .zoomtext
 {
@@ -29,6 +24,10 @@ table, tr, td, th
 {
 	vertical-align: top;
 	display:block;
+}
+.grayed
+{
+	background: lightGray;
 }
 pre
 {

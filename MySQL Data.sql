@@ -32,29 +32,13 @@ CREATE TABLE badgeImage (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `checkin`
+-- Dumping data for table `badgeImage`
 --
 
-DROP TABLE IF EXISTS checkin;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE checkin (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  userID int(11) NOT NULL,
-  missionID int(11) NOT NULL,
-  lat decimal(9,6) NOT NULL,
-  lng decimal(9,6) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  json varchar(1000) DEFAULT NULL,
-  beforeProgress smallint(6) DEFAULT NULL,
-  afterProgress smallint(6) DEFAULT NULL,
-  PRIMARY KEY (id),
-  KEY userID (userID),
-  KEY missionID (missionID),
-  CONSTRAINT checkin_ibfk_1 FOREIGN KEY (userID) REFERENCES `user` (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT checkin_ibfk_2 FOREIGN KEY (missionID) REFERENCES mission (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES badgeImage WRITE;
+/*!40000 ALTER TABLE badgeImage DISABLE KEYS */;
+/*!40000 ALTER TABLE badgeImage ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `location`
@@ -74,6 +58,16 @@ CREATE TABLE location (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `location`
+--
+
+LOCK TABLES location WRITE;
+/*!40000 ALTER TABLE location DISABLE KEYS */;
+INSERT INTO location VALUES (1,40.428251,-79.970312,75.000000,0.648495316214921,0.7612186445741523,'mural1'),(2,40.428378,-79.971449,75.000000,0.6484970035063305,0.761217207138219,'mural2'),(3,40.429454,-79.996997,75.000000,0.6485112988553022,0.7612050283970863,'mural3'),(4,40.428576,-79.980126,75.000000,0.6484996340802827,0.7612149660889094,'mural4'),(5,40.428592,-79.971148,75.000000,0.6484998466515769,0.7612147849936187,'mural5'),(6,40.428833,-79.984144,75.000000,0.6485030485005795,0.761212057238622,'mural6'),(7,40.428713,-79.986013,75.000000,0.6485014542203527,0.761213415458561,'mural7'),(8,40.428670,-79.987515,75.000000,0.6485008829359123,0.7612139021532267,'mural8'),(10,40.426728,-79.968984,30.000000,0.6484750817555583,0.7612358821956057,'ss_Zenith'),(11,40.429862,-79.965809,50.000000,0.6485167193367434,0.761200410365567,'sss_sculpture'),(12,40.428571,-79.965573,30.000000,0.6484995676517428,0.7612150226811757,'sss_climbing'),(13,40.427970,-79.965619,50.000000,0.648491582905281,0.7612218250293425,'sss_fountain');
+/*!40000 ALTER TABLE location ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `mission`
@@ -98,6 +92,16 @@ CREATE TABLE mission (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `mission`
+--
+
+LOCK TABLES mission WRITE;
+/*!40000 ALTER TABLE mission DISABLE KEYS */;
+INSERT INTO mission VALUES (1,'Murals Finder','Pittsburgh is not only a city of rivers and bridges, it\'s also a city of murals. There are 376 (excluding graffiti) murals in the city. These works run the gamut, from abstract to representational, political to whimsical. Some are based on famous paintings, others came from the artists\' experience and imagination. Many were group projects by young people, intended to beautify hard-hit neighborhoods and give the participants a sense of ownership.  Your mission is to find murals in The South Side around East Carson Street. Find all 8 of them to win the Diamond Badge.','South Side','culture',0,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,'Mural Master'),(2,'ETC Mission','Check-in at the ETC','Oakland','ETC, Debug',0,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,'Developer'),(3,'Antiques & Food!?!','Looking for a vegetarian bite to eat? How about a ridiculous amount of antique stuff? If you answered yes to either question, then you should check out Zenith at the corner of Sarah St. and S. 26th St. Check-in when you get there to earn the Antique Gourmet badge!','South Side Flats','Food',0,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,'Antique Gourmet'),(4,'South Side Summer (for kids)','Take your kids on a mini-adventure at the South Side Works (and have lunch at Hofbrauhaus when you\'re done)! Start by going down by the river on the Three Rivers Heritage Trail. While there, take in the river view while your kids play around a group of rusty sculptures (your first check-in). Then walk to the main retail area and let your kids watch climbers practice rock climbing on the Pinnacle (your second check-in). Finally, find the fountain and watch the kids cool down (your third and final check-in). Find all three locations to earn the South Side Parent badge.','South Side Flats','Kids, Outdoors',1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,'South Side Parent');
+/*!40000 ALTER TABLE mission ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `missionimage`
 --
 
@@ -113,6 +117,16 @@ CREATE TABLE missionimage (
   CONSTRAINT missionimage_ibfk_1 FOREIGN KEY (missionID) REFERENCES mission (id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `missionimage`
+--
+
+LOCK TABLES missionimage WRITE;
+/*!40000 ALTER TABLE missionimage DISABLE KEYS */;
+INSERT INTO missionimage VALUES (1,1,'/images/mural1.jpg'),(2,1,'/images/mural2.jpg'),(3,1,'/images/mural3.jpg'),(4,1,'/images/mural4.jpg'),(5,1,'/images/mural5.jpg'),(6,1,'/images/mural6.jpg'),(7,1,'/images/mural7.jpg'),(8,1,'/images/mural8.jpg');
+/*!40000 ALTER TABLE missionimage ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `missionlocation`
@@ -134,61 +148,14 @@ CREATE TABLE missionlocation (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `quarters`
+-- Dumping data for table `missionlocation`
 --
 
-DROP TABLE IF EXISTS quarters;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE quarters (
-  rowID int(11) NOT NULL AUTO_INCREMENT,
-  userID int(11) DEFAULT '1001',
-  lat decimal(9,6) DEFAULT NULL,
-  lng decimal(9,6) DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (rowID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS user;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user` (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  userName varchar(100) NOT NULL,
-  firstName varchar(255) NOT NULL,
-  lastName varchar(100) NOT NULL,
-  email varchar(100) NOT NULL,
-  registered timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  confirmLink varchar(100) NOT NULL,
-  confirmedEmail tinyint(1) NOT NULL DEFAULT '0',
-  `password` binary(32) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `usermission`
---
-
-DROP TABLE IF EXISTS usermission;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE usermission (
-  userID int(11) NOT NULL,
-  missionID int(11) NOT NULL,
-  progress smallint(6) NOT NULL,
-  startTime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (userID,missionID),
-  KEY missionID (missionID),
-  CONSTRAINT usermission_ibfk_1 FOREIGN KEY (userID) REFERENCES `user` (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT usermission_ibfk_2 FOREIGN KEY (missionID) REFERENCES mission (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES missionlocation WRITE;
+/*!40000 ALTER TABLE missionlocation DISABLE KEYS */;
+INSERT INTO missionlocation VALUES (1,1,0,0),(1,2,1,0),(1,3,2,0),(1,4,3,0),(1,5,4,0),(1,6,5,0),(1,7,6,0),(1,8,7,0),(3,10,1,1),(4,11,1,1),(4,12,2,1),(4,13,3,1);
+/*!40000 ALTER TABLE missionlocation ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

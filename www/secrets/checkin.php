@@ -34,6 +34,7 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	//echo $progress;
 	
 	//update check in
+	$result['update'] = 0;
 	foreach($stmt_rows as $temp){
 		$next['lat'] = $temp[0];
 		$next['lng'] = $temp[1];
@@ -48,40 +49,41 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 			$stmtUpdate = $db->prepare("UPDATE usermission SET progress = progress|? WHERE missionID=? AND userID=?");
 			$stmtUpdate->bind_param('iii', $mask, $_POST['missionID'],$_POST['userID']);
 			$stmtUpdate->execute();
-			if($stmtUpdate->affected_rows<=0)
-			{
-				if($result['update']!=1) $result['update'] = 0;
-			}
-			else{
-				$result['update'] = 1;
-				$result[] = $next;
-			}
 			$stmtUpdate->close();
-		}
-		else
-		{
-			if($result['update']!=1) $result['update'] = 0;
+			$result['update'] = 1;
+			$result[] = $next;
 		}
 	}
-	$result['complete'] = 0;
+	
 		
-	//check if mission completes
-	/*
-	$count =0;
-	for($i = 0;$i < ;$i$stmt->num_rows++)
-	{
-		if(($progress>>$i) & 0x1 == 1){
-			$count++;
-		}
-	}
-	if($count >= $stmt->num_rows - 3){
-		$result['complete'] = 1;//player meets mission the requirment
+	//get total number of lacations
+	$totalLocationNUM = 0; 
+	$stmtTotalLocation = $db->prepare("SELECT COUNT(DISTINCT missionlocation.locationID), bit_count(usermission.progress) FROM missionlocation, usermission WHERE missionlocation.missionID=? and usermission.userID=? and usermission.missionID=?");
+	$stmtTotalLocation->bind_param('iii', $_POST['missionID'], $_POST['userID'], $_POST['missionID']);
+	$stmtTotalLocation->execute();
+	$stmtTotalLocation->bind_result($totalLocationNUM, $count);
+	$stmtTotalLocation->fetch();
+	$stmtTotalLocation->close();
+	
+	if($count < (int)($totalLocationNUM/2)){
+		$result['complete'] = 0;
+		$result['badges'] = 0;
 	}
 	else{
-		$result['complete'] = 0;//playe haven't met the basic requirement
+		$result['complete'] = 1;
+		if($count == $totalLocationNUM){
+			$result['badges'] = 3;
+		}
+		else if($count >= (int)($totalLocationNUM*0.8)){
+			$result['badges'] = 2;
+		}
+		else{
+			$result['badges'] = 1;
+		}
 	}
-	*/
 	
+	$result['progress'] = $count;
+	$result['totalLocations'] = $totalLocationNUM;
 	
 	$stmt = $db->prepare("insert ignore into checkin(userID, missionID, lat, lng, json, beforeProgress, afterProgress) values (?, ?, ?, ?, ?, ?, ?)");
 	$stmt->bind_param('iiddsii', $_POST['userID'], $_POST['missionID'], $_POST['lat'],$_POST['lng'], $debugjson, $progressTEMP, $progress);

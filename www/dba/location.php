@@ -11,26 +11,84 @@ header("Pragma: no-cache");
 <head>
 <title>Location - Pittsburgh Challenge Database</title>
 <link rel="stylesheet" type="text/css" href="dba.css">
-
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBY1D4KC4Rs0dHqfab46Qi84BR3EisJ8xQ&sensor=false"></script>
 <script type="text/javascript" src="maps.js"></script>
-
 <script type="text/javascript">
+createMap(function(map, marker, circle)
+{
+	zoomMap.map = map;
+	
+	marker.onDrop = function(e)
+	{
+		updateLatLng(e.latLng, false, true);
+	};
+	
+	map.onClick = function(e)
+	{
+		updateLatLng(e.latLng, true, true);
+	};
+	
+	circle.onChanged = function()
+	{
+		updateLatLng(circle.getCenter(), true, false);
+	};
+	
+	updateLatLng.marker = marker;
+	updateLatLng.circle = circle;
+});
+
 function removeRow(id)
 {
 	document.getElementsByName("removeRow")[0].value = id;
-	document.getElementById("removalFrm").submit();
+	if(confirm('Are you sure you want to delete this record?')) document.getElementById("removalFrm").submit();
 }
 
-function zoomMap(lat, lng)
+function zoomMap(lat, lng, radius)
 {
-	centerMap(lat, lng);
+	zoomMap.map.centerOn(lat, lng, radius);
+}
+
+function zoomMapForm()
+{
+	var lat = document.getElementsByName("lat")[0].value;
+	var lng = document.getElementsByName("lng")[0].value;
+	var rad = document.getElementsByName("radius")[0].value;
+	if(lat!="" && lng!="") zoomMap(lat, lng, rad);
 }
 
 function refreshPage()
 {
 	location.reload();
 }
+
+function updateLatLng(ll, updateMaker, updateCircle, updateMap)
+{
+	var lat = ll.lat();
+	var lng = ll.lng();
+	var radius = updateLatLng.circle.getRadius();
+
+	document.getElementsByName("lat")[0].value = lat;
+	document.getElementsByName("lng")[0].value = lng;
+	document.getElementsByName("radius")[0].value = radius;
+	if(updateMaker) updateLatLng.marker.setPosition(ll);
+	if(updateCircle)
+	{
+		var oldFn = updateLatLng.circle.onChanged;
+		updateLatLng.circle.onChanged = function(){};
+		updateLatLng.circle.setCenter(ll);
+		updateLatLng.circle.onChanged = oldFn;
+	}
+}
+
+function duplicate(id, lat, lng, radius, name)
+{
+	document.getElementsByName("id")[0].value = id
+	document.getElementsByName("lat")[0].value = lat;
+	document.getElementsByName("lng")[0].value = lng;
+	document.getElementsByName("radius")[0].value = radius;
+	document.getElementsByName("name")[0].value = name;
+	zoomMap(lat, lng, radius);
+}
+
 </script>
 </head>
 <body>
@@ -55,28 +113,39 @@ if(is_numeric($_POST['removeRow']))
 
 if($_POST['lat']!='' && $_POST['lng']!='')
 {
-	$stmt = $db->prepare("insert into $table(lat, lng, radius, name, latSin, latCos) values (?, ?, ?, ?, ?, ?)");
-	$stmt->bind_param( 'dddsdd', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])) );
+	$stmt = "";
+	if(is_numeric($_POST['id']))
+	{
+		$stmt = $db->prepare("update $table set lat=?, lng=?, radius=?, name=?, latSin=?, latCos=? where id=?");
+		$stmt->bind_param( 'dddsddi', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])), $_POST['id'] );
+	}
+	else
+	{
+		$stmt = $db->prepare("insert into $table(lat, lng, radius, name, latSin, latCos) values (?, ?, ?, ?, ?, ?)");
+		$stmt->bind_param( 'dddsdd', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])) );
+	}
+
 	$stmt->execute();
-	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error inserting rows!</div>\n";
+	if($stmt->affected_rows<=0 && !is_numeric($_POST['id'])) echo "<div class=\"errortext\">Error inserting rows!</div>\n";
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, lat, lng, radius, name, description, latSin, latCos from $table");
+$stmt = $db->prepare("select id, lat, lng, radius, name, latSin, latCos from $table");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
-echo "<tr><th></th><th>ID</th><th>Latitude</th><th>Longitude</th><th>Radius</th><th>Name</th><th>Description</th><th>sin</th><th>cos</th>";
+echo "<tr><th></th><th></th><th>ID</th><th>Latitude</th><th>Longitude</th><th>Radius</th><th>Name</th><th>sin</th><th>cos</th>";
 echo "<td></td></tr>\n";
 
 $stmt->execute();
-$stmt->bind_result($id, $lat, $lng, $radius, $name, $desc, $sin, $cos);
+$stmt->bind_result($id, $lat, $lng, $radius, $name, $sin, $cos);
 
 while($stmt->fetch())
 {
 	echo "<tr>".
-	"<td><a class=\"zoomtext\" href=\"javascript:void(0)\" onclick=\"zoomMap($lat, $lng)\">+</td>".
-	"<td>$id</td><td>$lat</td><td>$lng</td><td>$radius</td><td>$name</td><td>$desc</td><td>$sin</td><td>$cos</td>".
+	"<td><a class=\"zoomtext\" href=\"javascript:void(0)\" onclick=\"zoomMap($lat, $lng, $radius)\">+</td>".
+	"<td><a class=\"copyText\" href=\"javascript:void(0)\" onClick=\"duplicate($id, $lat, $lng, $radius, '$name')\">&dArr;</a></td>".
+	"<td>$id</td><td>$lat</td><td>$lng</td><td>$radius</td><td>$name</td><td>$sin</td><td>$cos</td>".
 	"<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeRow($id)\">X</a></td>".
 	"</tr>\n";
 }
@@ -90,7 +159,11 @@ $db->close();
 
 <form method="post" action="location.php">
 <table>
-<tr><td>Name</td><td><input name="name" type="text" size="50"/ ></td></tr>
+<tr>
+	<td rowspan="100"><a class="zoomtext" href="javascript:void(0)" onclick="zoomMapForm()">+</td>
+	<td>ID</td><td><input class="grayed"d name="id" readonly="readonly" type="text" size="50"/ ></td>
+</tr>
+<td>Name</td><td><input name="name" type="text" size="50"/ ></td>
 <tr><td>Latitude</td><td><input name="lat" type="text" size="50" /></td></tr>
 <tr><td>Longitude</td><td><input name="lng" type="text" size="50" /></td></tr>
 <tr><td>Radius (meters)</td><td><input name="radius" type="text" size="50" /></td></tr>

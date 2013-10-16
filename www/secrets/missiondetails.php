@@ -6,8 +6,8 @@ if($_POST['missionID']!='')
 	$db = connectDB();
 	
 	$stmt = $db->prepare("select name, description from mission ".
-	"where (year(startDate)<=0) or (year(startDate)>0 and now() between startDate and endDate)");
-	$stmt->bind_param('d', $_POST['missionID']);
+	"where ((year(startDate)<=0) or (year(startDate)>0 and now() between startDate and endDate)) and mission.id=?");
+	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
 	bind_array($stmt, $rows);
 	while($stmt->fetch())

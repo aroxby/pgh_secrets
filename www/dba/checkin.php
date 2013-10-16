@@ -11,19 +11,26 @@ header("Pragma: no-cache");
 <head>
 <title>Checkin - Pittsburgh Challenge Database</title>
 <link rel="stylesheet" type="text/css" href="dba.css">
-
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBY1D4KC4Rs0dHqfab46Qi84BR3EisJ8xQ&sensor=false"></script>
+<style>
+#dataTable
+{
+	width:50%;
+}
+.jsonString
+{
+	word-break:break-all;
+}
+</style>
 <script type="text/javascript" src="maps.js"></script>
-
 <script type="text/javascript">
+createMap(function(map, marker)
+{
+	zoomMap.map = map;
+});
+
 function zoomMap(lat, lng)
 {
-	centerMap(lat, lng);
-}
-
-function refreshPage()
-{
-	location.reload();
+	zoomMap.map.centerOn(lat, lng);
 }
 </script>
 </head>
@@ -41,7 +48,7 @@ $stmt = $db->prepare("select id, userID, missionID, lat, lng, timestamp, json, b
 $stmt->execute();
 $stmt->bind_result($id, $uid, $mid, $lat, $lng, $timestamp, $json, $before, $after);
 
-echo "<table id=\"dataTable\" width=\"50%\">\n";
+echo "<table id=\"dataTable\">\n";
 echo "<tr><th></th><th>Check-in ID</th><th>User ID</th><th>Mission ID</th><th>Latitude</th><th>Longitude</th><th>Timestamp</th>";
 echo "<th>JSON String</th><th>Before Progress</th><th>After Progress</th>";
 echo "</tr>\n";
@@ -50,7 +57,8 @@ while($stmt->fetch())
 {
 	echo "<tr>".
 	"<td><a class=\"zoomtext\" href=\"javascript:void(0)\" onclick=\"zoomMap($lat, $lng)\">+</a></td>".
-	"<td>$id</td><td>$uid</td><td>$mid</td><td>$lat</td><td>$lng</td><td>$timestamp</td><td>$json</td><td>$before</td><td>$after</td>".
+	"<td>$id</td><td>$uid</td><td>$mid</td><td>$lat</td><td>$lng</td><td>$timestamp</td>".
+	"<td class=\"jsonString\">$json</td><td>$before</td><td>$after</td>".
 	"</tr>\n";
 }
 echo "</table>\n";
