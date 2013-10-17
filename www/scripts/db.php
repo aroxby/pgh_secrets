@@ -6,8 +6,8 @@ dropDirectRequest(__FILE__);
 
 function connectDB()
 {
-	$db = new mysqli("localhost", "pgh-challenge", "5NdSW4FaAqQXthqs", "game");
-	if(mysqli_connect_errno())
+	$db = connectDBUser();
+	if($db->connect_errno)
 	{
 		$result = array();
 		$result['OK'] = 0;
@@ -15,6 +15,11 @@ function connectDB()
 		exit(json_encode($result));
 	}
 	return $db;
+}
+
+function connectDBUser()
+{
+	return new mysqli("localhost", "pgh-challenge", "5NdSW4FaAqQXthqs", "game");
 }
 
 function bind_array($stmt, &$row)

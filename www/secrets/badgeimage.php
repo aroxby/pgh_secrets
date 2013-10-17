@@ -9,9 +9,10 @@ if($_POST['missionID']!='' && $_POST['badgeNumber']!= '')
 	"where missionID = ? and badgeNumber = ?");
 	$stmt->bind_param('ii', $_POST['missionID'], $_POST['badgeNumber']);
 	$stmt->execute();
-	$stmt->bind_result($url);
+	$stmt->bind_result($uri);
 	$stmt->fetch();
-	$result[] = $url;
+	//$result['imageuri'] = $uri;
+	$result[] = $uri;
 	
 
 	$stmt->close();

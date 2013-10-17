@@ -9,12 +9,10 @@ if($_POST['missionID']!='')
 	"where ((year(startDate)<=0) or (year(startDate)>0 and now() between startDate and endDate)) and mission.id=?");
 	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
-	bind_array($stmt, $rows);
-	while($stmt->fetch())
-	{
-		$result[] = copyArray($rows);
-	}
-
+	bind_array($stmt, $row);
+	$stmt->fetch();
+	//$result = $row;
+	$result[] = $row;
 	$stmt->close();
 	$db->close();
 	

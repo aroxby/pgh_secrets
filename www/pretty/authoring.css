@@ -1,0 +1,27 @@
+table, th, tr, td
+{
+	border:solid 1px;
+	text-align:center;
+}
+.centeredText
+{
+	text-align:center;
+}
+.centered
+{
+	width:600px;
+	display:block;
+	margin: auto;
+}
+.halfWidth
+{
+	width:50%;
+}
+#mainDiv
+{
+	display:block;
+	margin: auto;
+	text-align:center;
+	border:solid 1px;
+	width:1000px;
+}

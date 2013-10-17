@@ -13,7 +13,7 @@ $post404 = " was not found on this server.</p>
 </body></html>
 ";
 
-return $pre404.$path.$post404;
+	return $pre404.$path.$post404;
 }
 
 function getMy404()
@@ -38,6 +38,18 @@ function copyArray($arr)
 		$return[$key] = $arr[$key];
 	}
 	return $return;
+}
+
+function noCache()
+{
+	if(!headers_sent())
+	{
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
+	}
 }
 
 dropDirectRequest(__FILE__);
