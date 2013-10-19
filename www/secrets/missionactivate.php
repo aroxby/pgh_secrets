@@ -20,7 +20,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	
 	$stmt = $db->prepare("select missionlocation.locationOrder, ".
 	"location.lat, location.lng, location.radius from location, missionlocation ".
-	"where missionlocation.missionID=? and missionlocation.locationID=location.id and missionlocation.showonmap=1 ".
+	"where missionlocation.missionID=? and missionlocation.locationID=location.id ".
 	"order by locationOrder ASC");
 	$stmt->bind_param('d', $_POST['missionID']);
 	$stmt->execute();

@@ -1,17 +1,14 @@
-table, th, tr, td
-{
-	border:solid 1px;
-	text-align:center;
-}
 .centeredText
 {
 	text-align:center;
 }
-.centered
+.leftText
 {
-	width:600px;
-	display:block;
-	margin: auto;
+	text-align:left;
+}
+.rightText
+{
+	text-align:right;
 }
 .halfWidth
 {
@@ -22,6 +19,18 @@ table, th, tr, td
 	display:block;
 	margin: auto;
 	text-align:center;
-	border:solid 1px;
+	/*border:solid 1px;*/
 	width:1000px;
+}
+.inputGroupTable
+{
+	width:100%;
+}
+.grayed
+{
+	background:lightgray;
+}
+.inputItem
+{
+	border:solid 1px;
 }
