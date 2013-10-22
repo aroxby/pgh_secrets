@@ -1,13 +1,17 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
-if($_POST['password']!='' && $_POST['username']!='')
+if($_POST['username']!='' /*&& $_POST['password']!=''*/)
 {
 
 	$db = connectDB();
-	$stmt = $db->prepare("select id from user where userName=? and password=? limit 1");
-	$stmt->bind_param( 'ss', $_POST['username'], $pass );
-	$pass = pack("H*" , $_POST['password']);
+	
+	//$stmt = $db->prepare("select id from user where userName=? and password=? limit 1");
+	//$stmt->bind_param( 'ss', $_POST['username'], $pass );
+	//$pass = pack("H*" , $_POST['password']);
+	$stmt = $db->prepare("select id from user where userName=? limit 1");
+	$stmt->bind_param( 's', $_POST['username'] );
+	
 	$stmt->bind_result($uid);
 	$stmt->execute();
 	if($stmt->fetch()===TRUE)

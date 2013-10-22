@@ -48,7 +48,8 @@ if($_POST['passwd']!='')
 	}
 
 	$stmt = $db->prepare("select null from user where userName = ? and password = ? limit 1");
-	$stmt->bind_param( 'si', $_POST['uname'], $_POST['passwd'] );
+	$stmt->bind_param( 'ss', $_POST['uname'], $pass );
+	$pass = pack("H*" , $_POST['passwd']);
 	$stmt->execute();
 	if($stmt->fetch()===TRUE) echo "<div class=\"successText\">Login Successful!</div>\n";
 	else echo "<div class=\"errortext\">Username or password incorrect!</div>\n";

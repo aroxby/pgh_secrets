@@ -1,3 +1,7 @@
+body
+{
+	background: #fdf7e9;
+}
 .centeredText
 {
 	text-align:center;
@@ -19,18 +23,24 @@
 	display:block;
 	margin: auto;
 	text-align:center;
-	/*border:solid 1px;*/
 	width:1000px;
 }
 .inputGroupTable
 {
 	width:100%;
 }
+.inputItem
+{
+	vertical-align:top;
+	border:solid 1px;
+	background: white;
+}
 .grayed
 {
 	background:lightgray;
 }
-.inputItem
+.tagSpan
 {
 	border:solid 1px;
+	background:lightblue;
 }
