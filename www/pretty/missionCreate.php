@@ -24,7 +24,7 @@ Next, you should include the neighborhood or general area where this mission tak
 You can also include "Tags" which serve as both categories and keywords for the mission.  Tags are seperated by commas.<br/>Below, you can see how your input will become tags.
 <? inputAllText(20, 'Tags:', 'text', 'tags', 'Music, Banjo, Elks', tagSpan('tagSpan'), tagSpan('tagSpanEx')); ?>
 blargh!
-<? inputAllArea(10, 'Description:', 'textarea', 'description', 'Come to the Elk\'s logdge and sing along with the banjo!'); ?>
+<? inputAllArea(10, 'Description:', 'textarea', 'description', 'Come to the Elk\'s lodge and sing along with the banjo!'); ?>
 <form></div>
 
 </body>

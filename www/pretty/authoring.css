@@ -2,17 +2,13 @@ body
 {
 	background: #fdf7e9;
 }
+textarea
+{
+	resize:vertical;
+}
 .centeredText
 {
 	text-align:center;
-}
-.leftText
-{
-	text-align:left;
-}
-.rightText
-{
-	text-align:right;
 }
 .halfWidth
 {
@@ -29,11 +25,16 @@ body
 {
 	width:100%;
 }
-.inputItem
+.inputCell
 {
 	vertical-align:top;
 	border:solid 1px;
 	background: white;
+	text-align:left;
+}
+.inputItem
+{
+	vertical-align:top;
 }
 .grayed
 {
