@@ -27,8 +27,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	bind_array($stmt, $rows);
 	while($stmt->fetch())
 	{
-		//$result['locations'][] = copyArray($rows);
-		$result[] = copyArray($rows);
+		$result['locations'][] = copyArray($rows);
 	}
 
 	$stmt->close();

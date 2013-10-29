@@ -11,8 +11,7 @@ if($_POST['missionID']!='')
 	$stmt->execute();
 	bind_array($stmt, $row);
 	$stmt->fetch();
-	//$result = $row;
-	$result[] = $row;
+	$result = $row;
 	$stmt->close();
 	$db->close();
 	

@@ -10,8 +10,7 @@ $stmt->execute();
 bind_array($stmt, $rows);
 while($stmt->fetch())
 {
-	//$result['missions'][] = copyarray($rows);
-	$result[] = copyarray($rows);
+	$result['missions'][] = copyarray($rows);
 }
 
 $stmt->close();

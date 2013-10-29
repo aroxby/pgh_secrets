@@ -12,8 +12,7 @@ if($_POST['missionID']!='')
 	bind_array($stmt, $rows);
 	while($stmt->fetch())
 	{
-		//$result['images'][] = $rows['imageuri'];
-		$result[] = $rows['imageuri'];
+		$result['images'][] = $rows['imageuri'];
 	}
 
 	$stmt->close();

@@ -18,43 +18,28 @@ function inputLabel($label, $class)
 	echo '<label class="'.$class.'">'.$label.'</label>';
 }
 
-function inputText($class, $length, $label, $type, $name, $value, $extraAttributes, $extraHTML)
+function inputField($class, $size, $label, $type, $name, $value, $extraAttributes, $extraHTML)
 {
-	echo '<input class="'.$class.'" size="'.$length.'" type="'.$type,'" id="'.$name.'" value="'.$value.'" '.$extraAttributes.' />'.$extraHTML.'</td>';
+	if($type=='textarea') echo '<textarea class="'.$class.'" style="width:98%" rows="'.$size.'" " id="'.$name.'" '.$extraAttributes.' >'.$value.'</textarea>'.$extraHTML.'</td>';
+	else echo '<input class="'.$class.'" min="0" size="'.$size.'" type="'.$type,'" id="'.$name.'" value="'.$value.'" '.$extraAttributes.' />'.$extraHTML.'</td>';
 }
 
-function inputArea($class, $size, $label, $type, $name, $value, $extraAttributes, $extraHTML)
+function inputClose($sayReturn)
 {
-	echo '<textarea class="'.$class.'" style="width:98%" rows="'.$size.'" " id="'.$name.'" '.$extraAttributes.' >'.$value.'</textarea>'.$extraHTML.'</td>';
+	echo '</tr></table>';
+	if($sayReturn) echo '<br/>';
 }
 
-function inputClose()
-{
-	echo '</tr></table><br/>';
-}
-
-function inputAllText($size, $label, $type, $name, $exampleValue, $extraUser='', $extraExample='')
+function input($size, $label, $type, $name, $exampleValue, $extra = array())
 {
 	inputTable();
 	inputCell('inputCell');
 	inputLabel($label, 'inputItem');
-	inputText('inputItem', $size, $label, $type, $name, '', '', $extraUser);
+	inputField('inputItem', $size, $label, $type, $name, '', '', @$extra['userhtml']);
 	inputCell('inputCell grayed');
 	inputLabel($label, 'inputItem');
-	inputText('inputItem grayed', $size, $label, $type, $name.'Ex', $exampleValue, 'readonly="readonly"', $extraExample);
-	inputClose();
-}
-
-function inputAllArea($size, $label, $type, $name, $exampleValue, $extraUser='', $extraExample='')
-{
-	inputTable();
-	inputCell('inputCell');
-	inputLabel($label, 'inputItem');
-	inputArea('inputItem', $size, $label, $type, $name, '', '', $extraUser);
-	inputCell('inputCell grayed');
-	inputLabel($label, 'inputItem');
-	inputArea('inputItem grayed', $size, $label, $type, $name.'Ex', $exampleValue, 'readonly="readonly"', $extraExample);
-	inputClose();
+	inputField('inputItem grayed', $size, $label, $type, $name.'Ex', $exampleValue, 'readonly="readonly"', @$extra['examplehtml']);
+	inputClose(!isset($extra['skipreturn']));
 }
 
 function tagSpan($id)

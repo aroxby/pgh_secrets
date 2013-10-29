@@ -18,8 +18,7 @@ if($_POST['userID']!='')
 		if($row['bit_count(progress)=count(locationorder)'] == 0) continue;
 		unset($row['bit_count(progress)=count(locationorder)']);
 		
-		//$result[missions][] = $row;
-		$result[] = $row;
+		$result['missions'][] = $row;
 	}
 	$stmt->close();
 	$db->close();

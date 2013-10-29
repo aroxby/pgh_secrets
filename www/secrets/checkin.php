@@ -10,60 +10,57 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	"from location, missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id ".
 	"and (ACOS(SIN(?)*latsin+COS(?)*latcos*COS(radians(lng-?)))*6371000) < location.radius ORDER BY missionlocation.locationOrder ASC");
 	
-	$stmt->bind_param('iddd', $_POST['missionID'], deg2rad($_POST['lat']), deg2rad($_POST['lat']), $_POST['lng']);
+	$stmt->bind_param('iddd', $_POST['missionID'], $latRadians, $latRadians, $_POST['lng']);
+	$latRadians = deg2rad($_POST['lat']);
 	$stmt->execute();
-	$stmt->bind_result($lat, $lng, $order, $radius);
-	
-	$stmt_rows = array();
-	while($stmt->fetch()){
-		$stmt_rows[] = array($lat,$lng, $order, $radius);
+	bind_array($stmt, $row);
+	while($stmt->fetch())
+	{
+		$stmt_rows[] = copyArray($row);
 	}
 	$stmt->close();
 	
 	//get progress from usermission
-	$stmtProgress = $db->prepare("SELECT progress FROM usermission WHERE missionID=? AND userID=?");
-	$stmtProgress->bind_param('ii',  $_POST['missionID'],$_POST['userID']);
-	$stmtProgress->execute();
-	$stmtProgress->bind_result($progressTEMP);
-	
-	while($stmtProgress->fetch()){
-		$progress = $progressTEMP;
-	}
-	$stmtProgress->close();
-	
-	//echo $progress;
+	$stmt = $db->prepare("SELECT progress FROM usermission WHERE missionID=? AND userID=?");
+	$stmt->bind_param('ii',  $_POST['missionID'],$_POST['userID']);
+	$stmt->execute();
+	$stmt->bind_result($oldProgress);
+	$stmt->fetch();
+	$stmt->close();
+	$progress = $oldProgress;
 	
 	//update check in
 	$result['update'] = 0;
-	foreach($stmt_rows as $temp){
-		$next['lat'] = $temp[0];
-		$next['lng'] = $temp[1];
-		$next['order'] = $temp[2];
-		$next['radius'] = $temp[3];
-		$mask = 0x1<<$temp[2];
+	foreach($stmt_rows as $next)
+	{
+		//fix field name
+		$next['order'] = $next['locationOrder'];
+		unset($next['locationOrder']);
+
+		$mask = 0x1<<$next['order'];
 		
 		if(($mask & $progress) == 0)
 		{
 			$progress |= $mask;
 			//update progress
-			$stmtUpdate = $db->prepare("UPDATE usermission SET progress = progress|? WHERE missionID=? AND userID=?");
-			$stmtUpdate->bind_param('iii', $mask, $_POST['missionID'],$_POST['userID']);
-			$stmtUpdate->execute();
-			$stmtUpdate->close();
+			$stmt = $db->prepare("UPDATE usermission SET progress = progress|? WHERE missionID=? AND userID=?");
+			$stmt->bind_param('iii', $mask, $_POST['missionID'],$_POST['userID']);
+			$stmt->execute();
+			$stmt->close();
 			$result['update'] = 1;
-			$result[] = $next;
+			$result['locations'][] = $next;
 		}
 	}
 	
 		
 	//get total number of lacations
 	$totalLocationNUM = 0; 
-	$stmtTotalLocation = $db->prepare("SELECT COUNT(DISTINCT missionlocation.locationID), bit_count(usermission.progress) FROM missionlocation, usermission WHERE missionlocation.missionID=? and usermission.userID=? and usermission.missionID=?");
-	$stmtTotalLocation->bind_param('iii', $_POST['missionID'], $_POST['userID'], $_POST['missionID']);
-	$stmtTotalLocation->execute();
-	$stmtTotalLocation->bind_result($totalLocationNUM, $count);
-	$stmtTotalLocation->fetch();
-	$stmtTotalLocation->close();
+	$stmt = $db->prepare("SELECT COUNT(DISTINCT missionlocation.locationID), bit_count(usermission.progress) FROM missionlocation, usermission WHERE missionlocation.missionID=? and usermission.userID=? and usermission.missionID=?");
+	$stmt->bind_param('iii', $_POST['missionID'], $_POST['userID'], $_POST['missionID']);
+	$stmt->execute();
+	$stmt->bind_result($totalLocationNUM, $count);
+	$stmt->fetch();
+	$stmt->close();
 	
 	if($count < (int)($totalLocationNUM/2)){
 		$result['complete'] = 0;
@@ -86,7 +83,7 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	$result['totalLocations'] = $totalLocationNUM;
 	
 	$stmt = $db->prepare("insert ignore into checkin(userID, missionID, lat, lng, json, beforeProgress, afterProgress) values (?, ?, ?, ?, ?, ?, ?)");
-	$stmt->bind_param('iiddsii', $_POST['userID'], $_POST['missionID'], $_POST['lat'],$_POST['lng'], $debugjson, $progressTEMP, $progress);
+	$stmt->bind_param('iiddsii', $_POST['userID'], $_POST['missionID'], $_POST['lat'],$_POST['lng'], $debugjson, $oldProgress, $progress);
 	$debugjson = '['.json_encode($result).']';
 	$stmt->execute();
 	$stmt->close();
