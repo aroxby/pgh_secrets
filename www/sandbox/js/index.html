@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>File Upload</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script>
+
+<style>
+.bar
+{
+	background-color: #B4F5B4;
+	width:0%;
+	height:20px
+}
+.percent
+{
+	border: 2px solid black;
+}
+#status
+{
+	border: 2px solid green;
+}
+body
+{
+	width:98%;
+}
+#preview
+{
+	width:150px;
+}
+</style>
+
+</head>
+<body>
+
+<form action="uploadHandler.php" method="post" id="imgFrm" enctype="multipart/form-data">
+	<input type="file" name="images[]" id="images" multiple="multiple">
+	<input type="hidden" name="yu" value="xx">
+	<br/>
+	<input type="submit" value="Upload File to Server">
+</form>
+
+<div class="progress">
+	<div class="bar"></div >
+	<div class="percent">0%</div >
+</div>
+<div id="status"></div>
+<img id="preview">
+
+</body>
+
+<script type="text/javascript">
+(function()
+{
+	var bar = $('.bar');
+	var percent = $('.percent');
+	var status = $('#status');
+	$('#imgFrm').ajaxForm({
+		beforeSend: function()
+		{
+			status.empty();
+			var percentVal = '0%';
+			bar.width(percentVal)
+			percent.html(percentVal);
+			alert( document.getElementById("images").value );
+		},
+		uploadProgress: function(event, position, total, percentComplete)
+		{
+			var percentVal = percentComplete + '%';
+			bar.width(percentVal)
+			percent.html(percentVal);
+		},
+		success: function()
+		{
+			var percentVal = '100%';
+			bar.width(percentVal)
+			percent.html(percentVal);
+		},
+		complete: function(xhr)
+		{
+			status.html(xhr.responseText);
+		}
+	});
+
+})();
+</script>
+
+</html>
