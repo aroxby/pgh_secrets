@@ -40,6 +40,12 @@ function copyArray($arr)
 	return $return;
 }
 
+function renameKey(&$arr, $oldKey, $newKey)
+{
+	$arr[$newKey] = $arr[$oldKey];
+	unset($arr[$oldKey]);
+}
+
 function noCache()
 {
 	if(!headers_sent())

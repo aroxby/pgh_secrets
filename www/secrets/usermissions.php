@@ -11,7 +11,7 @@ if($_POST['userID']!='')
 	bind_array($stmt, $row);
 	while($stmt->fetch())
 	{
-		$result['missions'][] = $row;
+		$result['missions'][] = $row['missionid'];
 	}
 	$stmt->close();
 	$db->close();

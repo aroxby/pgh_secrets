@@ -8,7 +8,7 @@ header("Pragma: no-cache");
 ?>
 <html>
 <head>
-<title>POST Test</title>
+<title>API - Details</title>
 <style>
 .bordered
 {
@@ -27,11 +27,6 @@ header("Pragma: no-cache");
 }
 </style>
 <script type="text/javascript">
-function refreshPage()
-{
-	location.reload();
-}
-
 function doSubmit()
 {
 	document.getElementById('userForm').action = document.getElementById('actionInput').value;
@@ -63,52 +58,24 @@ function checkSubmit(e)
 	}
 }
 
-function skipTo(n)
-{
-	while(nextID<n) checkCreate(nextID);
-}
-
-function populate()
-{
-<?php
-	echo "\tskipTo(".count($_POST).");";
-	$id = 0;
-
-	foreach ($_POST as $name => $value)
-	{
-		echo "\tdocument.getElementById('name'+$id).value = '$name';\n";
-		echo "\tdocument.getElementById('value'+$id).value = '$value';\n";
-		$id++;
-	}
-?>
-}
-
 nextID = 0;
 </script>
 </head>
-<?php
-	echo "<body onload=\"populate()\">";
-?>
 
-<form id="userForm" method="post" action="post.php" onKeyPress="checkSubmit(event)" target="_blank">
+<body>
+<form id="userForm" method="post" action="/secrets/missiondetails.php" onKeyPress="checkSubmit(event)" target="_blank">
 <div id="dataTableMaster">
-<table class="bordered"><tr><td>Action</td><td><input type="text" size="30" id="actionInput" / ></td></tr></table>
+<table class="bordered"><tr><td>Action</td><td><input type="text" size="30" value="/secrets/missiondetails.php" id="actionInput" /></td></tr></table>
 <div id="dataTable0">
-<table class="bordered"><tr><td>Name</td><td><input type="text" id="name0" size="30"/ ></td><td>Value</td><td><input id="value0" type="text" size="30" onfocus="checkCreate(0)"/ ></td></tr></table>
+<table class="bordered"><tr><td>Name</td><td><input type="text" id="name0" size="30" value="missionID"/ ></td><td>Value</td><td><input id="value0" type="text" size="30" onfocus="checkCreate(0)" value="5"/ ></td></tr></table>
 </div>
-<div id="dataTable1"></div>
+<div id="dataTable1">
+<table class="subbordered"><tr><td>Name</td><td><input type="text" id="name1" size="30" value="" / ></td><td>Value</td><td><input id="value1" type="text" size="30" onfocus="checkCreate(1)" value="" / ></td></tr></table>
+</div>
+<div id="dataTable2"></div>
 </div>
 <input type="button" class="leftAlign" value="Submit" onClick="doSubmit()" />
 </form>
-<input type="button" value="Refresh" onClick="refreshPage()" />
-
-<hr/>
-<pre>
-<?php
-	echo count($_POST)." elements\n";
-	print_r($_POST);
-?>
-</pre>
 
 </body>
 </html>

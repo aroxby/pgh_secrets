@@ -4,7 +4,7 @@ include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['userID']!=''){
 	$db = connectDB();
 	$result['OK'] = 1;
-	$result['error'] = "No error.";
+	$result['error'] = "No error";
 	
 	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationOrder, location.radius ".
 	"from location, missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id ".
@@ -31,11 +31,12 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	
 	//update check in
 	$result['update'] = 0;
+	$result['alreadyFound'] = 0;
+	$alreadyFound = false;
 	foreach($stmt_rows as $next)
 	{
 		//fix field name
-		$next['order'] = $next['locationOrder'];
-		unset($next['locationOrder']);
+		renameKey($next, 'locationOrder', 'order');
 
 		$mask = 0x1<<$next['order'];
 		
@@ -48,11 +49,16 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 			$stmt->execute();
 			$stmt->close();
 			$result['update'] = 1;
-			$result['locations'][] = $next;
+			$result['locations'][] = copyArray($next);
 		}
 	}
+	else
+	{
+		$alreadyFound = true;
+	}
 	
-		
+	if($result['update']!==1) $result['alreadyFound'] = 1;
+	
 	//get total number of lacations
 	$totalLocationNUM = 0; 
 	$stmt = $db->prepare("SELECT COUNT(DISTINCT missionlocation.locationID), bit_count(usermission.progress) FROM missionlocation, usermission WHERE missionlocation.missionID=? and usermission.userID=? and usermission.missionID=?");

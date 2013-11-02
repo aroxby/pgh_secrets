@@ -46,9 +46,9 @@ if(is_numeric($_POST['removeRow']))
 
 if($_POST['name']!='')
 {
-	$stmt = $db->prepare("insert into $table(name, description, neighborhood, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$stmt = $db->prepare("insert into $table(name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	$stmt->bind_param(
-		'ssssissis', $_POST['name'], $_POST['desc'], $_POST['neighborhood'], $_POST['tags'], $orderd,
+		'sssssissis', $_POST['name'], $_POST['desc'], $_POST['neighborhood'], $_POST['type'], $_POST['tags'], $orderd,
 		$_POST['startdate'], $_POST['enddate'], $_POST['limit'],
 		$_POST['badge']
 	);
@@ -58,23 +58,23 @@ if($_POST['name']!='')
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, name, description, neighborhood, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName from $table");
+$stmt = $db->prepare("select id, name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, minuteLimit, badgeName from $table");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
-echo "<tr><th>ID</th><th>Name</th><th>Description</th><th>Neighborhood</th><th>Tags</th>".
+echo "<tr><th>ID</th><th>Name</th><th>Description</th><th>Neighborhood</th><th>Type</th><th>Tags</th>".
 "<th>Locations Ordered</th>".
 "<th>Start Date</th><th>End Date</th><th>Time Limit</th>".
 "<th>Badge Name</th>";
 echo "<td></td></tr>\n";
 
 $stmt->execute();
-$stmt->bind_result($id, $name, $desc, $neighborhood, $tags, $ordered, $startdate, $enddate , $limit, $badge);
+$stmt->bind_result($id, $name, $desc, $neighborhood, $type, $tags, $ordered, $startdate, $enddate , $limit, $badge);
 
 while($stmt->fetch())
 {
 	echo "<tr>".
-	"<td>$id</td><td>$name</td><td><pre>".htmlspecialchars($desc)."</pre></td><td>$neighborhood</td><td>$tags</td>";
+	"<td>$id</td><td>$name</td><td><pre>".htmlspecialchars($desc)."</pre></td><td>$neighborhood</td><td>$type</td><td>$tags</td>";
 	if(is_numeric($ordered) && $ordered>0) echo "<td><input type=\"checkbox\" disabled=\"disabled\" checked=\"checked\"/></td>";
 	else echo "<td><input type=\"checkbox\" disabled=\"disabled\" /></td>";
 	echo "<td>$startdate</td><td>$enddate</td><td>$limit</td><td>$badge</td>".
@@ -93,6 +93,7 @@ $db->close();
 <table>
 <tr><td>Name</td><td><input name="name" type="text" size="50"/ ></td></tr>
 <tr><td>Neighborhood</td><td><input name="neighborhood" type="text" size="50" /></td></tr>
+<tr><td>Type</td><td><input name="type" type="text" size="50" /></td></tr>
 <tr><td>Tags (Comma Seperated)</td><td><input name="tags" type="text" size="50" /></td></tr>
 <tr><td colspan="2">Description</td></tr>
 <tr><td colspan="2"><textarea name="desc" rows="10" style="width:98.5%"></textarea></td></tr>

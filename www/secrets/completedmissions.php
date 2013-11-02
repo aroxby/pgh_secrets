@@ -13,12 +13,11 @@ if($_POST['userID']!='')
 	$stmt->bind_param('i', $_POST['userID']);
 	$stmt->execute();
 	bind_array($stmt, $row);
+	
 	while($stmt->fetch())
 	{
 		if($row['bit_count(progress)=count(locationorder)'] == 0) continue;
-		unset($row['bit_count(progress)=count(locationorder)']);
-		
-		$result['missions'][] = $row;
+		$result['missions'][] = $row['missionid'];
 	}
 	$stmt->close();
 	$db->close();

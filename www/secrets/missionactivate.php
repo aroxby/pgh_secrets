@@ -34,6 +34,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	$db->close();
 	
 	$result['OK'] = 1;
+	
 	echo json_encode($result);
 }
 else

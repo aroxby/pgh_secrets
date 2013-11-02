@@ -64,7 +64,8 @@ if(is_numeric($_POST['removeRow']))
 if($_POST['passwd']!='')
 {
 	$stmt = $db->prepare("insert into $table(userName, firstName, lastName, email, password) values (?, ?, ?, ?, ?)");
-	$stmt->bind_param( 'ssssi', $_POST['uname'], $_POST['fname'], $_POST['lname'], $_POST['email'], $_POST['passwd'] );
+	$stmt->bind_param( 'sssss', $_POST['uname'], $_POST['fname'], $_POST['lname'], $_POST['email'], $pass );
+	$pass = pack('H*', $_POST['passwd']);
 	$stmt->execute();
 	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error inserting rows: ".htmlspecialchars($db->error)."</div>\n";
 	$stmt->close();

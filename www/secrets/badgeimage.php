@@ -10,8 +10,7 @@ if($_POST['missionID']!='' && $_POST['badgeNumber']!= '')
 	$stmt->bind_param('ii', $_POST['missionID'], $_POST['badgeNumber']);
 	$stmt->execute();
 	$stmt->bind_result($uri);
-	$stmt->fetch();
-	$result['imageuri'] = $uri;
+	if($stmt->fetch()) $result['imageuri'] = $uri;
 
 	$stmt->close();
 	$db->close();

@@ -8,7 +8,7 @@ header("Pragma: no-cache");
 ?>
 <html>
 <head>
-<title>POST Test</title>
+<title>API - Login</title>
 <style>
 .bordered
 {
@@ -30,6 +30,8 @@ header("Pragma: no-cache");
 <script type="text/javascript">
 function doSubmit()
 {
+	document.getElementById('userForm').action = document.getElementById('actionInput').value;
+
 	for(var i = 0; i<=nextID; i++)
 	{
 		document.getElementById('value'+i).name = document.getElementById('name'+i).value;
@@ -67,23 +69,17 @@ nextID = 2;
 </head>
 
 <body>
-<!--
-<form id="userForm" method="post" action="/secrets/login.php" onKeyPress="checkSubmit(event)" target="_blank">
-<form id="userForm" method="post" action="/secrets/checkin.php" onKeyPress="checkSubmit(event)" target="_blank">
-<form id="userForm" method="post" action="/secrets/missionactivate.php" onKeyPress="checkSubmit(event)" target="_blank">
-<form id="userForm" method="post" action="/sandbox/post.php" onKeyPress="checkSubmit(event)" target="_blank">
--->
 <form id="userForm" method="post" action="/secrets/login.php" onKeyPress="checkSubmit(event, doSubmit)" target="_blank">
 <div id="dataTableMaster">
-<table class="bordered"><tr><td>Action</td><td><input type="text" readonly="readonly" size="30" value="/secrets/login.php" / ></td></tr></table>
+<table class="bordered"><tr><td>Action</td><td><input type="text" size="30" value="/secrets/login.php" id="actionInput" /></td></tr></table>
 <div id="dataTable0">
 <table class="bordered"><tr><td>Name</td><td><input type="text" id="name0" size="30" value="username"/ ></td><td>Value</td><td><input id="value0" type="text" size="30" onfocus="checkCreate(0)" value="andy"/ ></td></tr></table>
 </div>
 <div id="dataTable1">
-<table class="bordered"><tr><td>Name</td><td><input type="text" id="name1" size="30" value="password" / ></td><td>Value</td><td><input id="value1" type="text" size="30" onfocus="checkCreate(1)" value="thedome" / ></td></tr></table>
+<table class="subbordered"><tr><td>Name</td><td><input type="text" id="name1" size="30" value="password" / ></td><td>Value</td><td><input id="value1" type="text" size="30" onfocus="checkCreate(1)" value="thedome" / ></td></tr></table>
 </div>
 <div id="dataTable2">
-<table class="bordered"><tr><td>Name</td><td><input type="text" id="name2" size="30" / ></td><td>Value</td><td><input id="value2" type="text" size="30" onfocus="checkCreate(2)" / ></td></tr></table>
+<table class="subbordered"><tr><td>Name</td><td><input type="text" id="name2" size="30" / ></td><td>Value</td><td><input id="value2" type="text" size="30" onfocus="checkCreate(2)" / ></td></tr></table>
 </div>
 <div id="dataTable3"></div>
 </div>
@@ -92,7 +88,7 @@ nextID = 2;
 
 <hr/>
 
-<form id="shaForm" method="post" action="/secrets/login.php" onKeyPress="checkSubmit(event, doSHA)" target="_blank">
+<form id="shaForm" onKeyPress="checkSubmit(event, doSHA)" target="_blank">
 <input type="text" id="plain" size="30" ><input type="button" value="SHA" onClick="doSHA()" /><br/>
 <input type="text" id="sha" size="30" ><br/>
 </form>

@@ -15,10 +15,8 @@ if($_POST['missionID']!='' && $_POST['userID']!='')
 	$stmt->fetch();
 	
 	//column name fix up
-	$row['progress'] = $row['bit_count(progress)'];
-	$row['total'] = $row['count(locationOrder)'];
-	unset($row['bit_count(progress)']);
-	unset($row['count(locationOrder)']);
+	renameKey($row, 'bit_count(progress)', 'progress');
+	renameKey($row, 'count(locationOrder)', 'total');
 	
 	if($row['progress']===null) $row['progress'] = 0;
 	$result = $row;

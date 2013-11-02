@@ -6,7 +6,7 @@ if($_POST['missionID']!=''){
 	$result['OK'] = 1;
 	$result['error'] = "No error.";
 	
-	$stmt = $db->prepare("select max(location.lat), min(location.lat), max(location.lng), min(location.lng) from location, missionlocation where missionlocation.missionID=1 and missionlocation.locationID=location.id");
+	$stmt = $db->prepare("select max(location.lat), min(location.lat), max(location.lng), min(location.lng) from location, missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id");
 	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute(); 
 	$stmt->bind_result($maxlat, $minlat, $maxlng, $minlng);
