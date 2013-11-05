@@ -7,16 +7,17 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	$result['error'] = "No error";
 	
 	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationOrder, location.radius ".
-	"from location, missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id ".
-	"and (ACOS(SIN(?)*latsin+COS(?)*latcos*COS(radians(lng-?)))*6371000) < location.radius ORDER BY missionlocation.locationOrder ASC");
+	"from location, missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id and location.photoCheckIn=? and ".
+	"(ACOS(SIN(?)*latsin+COS(?)*latcos*COS(radians(lng-?)))*6371000) < location.radius ORDER BY missionlocation.locationOrder ASC");
 	
-	$stmt->bind_param('iddd', $_POST['missionID'], $latRadians, $latRadians, $_POST['lng']);
+	$stmt->bind_param('iiddd', $_POST['missionID'], $photo, $latRadians, $latRadians, $_POST['lng']);
+	$photo  = intval($_POST['photo']);
 	$latRadians = deg2rad($_POST['lat']);
 	$stmt->execute();
 	bind_array($stmt, $row);
 	while($stmt->fetch())
 	{
-		$stmt_rows[] = copyArray($row);
+		$missionLocations[] = copyArray($row);
 	}
 	$stmt->close();
 	
@@ -33,7 +34,7 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	$result['update'] = 0;
 	$result['alreadyFound'] = 0;
 	$alreadyFound = false;
-	foreach($stmt_rows as $next)
+	foreach($missionLocations as $next)
 	{
 		//fix field name
 		renameKey($next, 'locationOrder', 'order');
@@ -51,13 +52,13 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 			$result['update'] = 1;
 			$result['locations'][] = copyArray($next);
 		}
-	}
-	else
-	{
-		$alreadyFound = true;
+		else
+		{
+			$alreadyFound = true;
+		}
 	}
 	
-	if($result['update']!==1) $result['alreadyFound'] = 1;
+	if($result['update']!==1) $result['alreadyFound'] = $alreadyFound?1:0;
 	
 	//get total number of lacations
 	$totalLocationNUM = 0; 

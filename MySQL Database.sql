@@ -53,7 +53,7 @@ CREATE TABLE checkin (
   KEY missionID (missionID),
   CONSTRAINT checkin_ibfk_1 FOREIGN KEY (userID) REFERENCES `user` (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT checkin_ibfk_2 FOREIGN KEY (missionID) REFERENCES mission (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=474 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,8 +71,9 @@ CREATE TABLE location (
   latSin double NOT NULL,
   latCos double NOT NULL,
   `name` varchar(100) NOT NULL,
+  photoCheckIn tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,23 +136,6 @@ CREATE TABLE missionlocation (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `quarters`
---
-
-DROP TABLE IF EXISTS quarters;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE quarters (
-  rowID int(11) NOT NULL AUTO_INCREMENT,
-  userID int(11) DEFAULT '1001',
-  lat decimal(9,6) DEFAULT NULL,
-  lng decimal(9,6) DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (rowID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `user`
 --
 
@@ -169,7 +153,7 @@ CREATE TABLE `user` (
   confirmedEmail tinyint(1) NOT NULL DEFAULT '0',
   `password` binary(32) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
