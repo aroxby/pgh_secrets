@@ -50,6 +50,16 @@ body
 </body>
 
 <script type="text/javascript">
+function dump(x)
+{
+	var s = '';
+	for(y in x)
+	{
+		s += y + '\n';
+	}
+	alert(s);
+}
+
 (function()
 {
 	var bar = $('.bar');
@@ -62,7 +72,6 @@ body
 			var percentVal = '0%';
 			bar.width(percentVal)
 			percent.html(percentVal);
-			alert( document.getElementById("images").value );
 		},
 		uploadProgress: function(event, position, total, percentComplete)
 		{
@@ -70,15 +79,16 @@ body
 			bar.width(percentVal)
 			percent.html(percentVal);
 		},
-		success: function()
+		success: function(responseText, xhr)
 		{
-			var percentVal = '100%';
+			var percentVal = '100%!';
 			bar.width(percentVal)
 			percent.html(percentVal);
+			status.html(responseText);
 		},
-		complete: function(xhr)
+		error: function(xhr)
 		{
-			status.html(xhr.responseText);
+			status.html("Internal Server Error");
 		}
 	});
 
