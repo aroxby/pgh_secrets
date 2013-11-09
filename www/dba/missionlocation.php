@@ -56,7 +56,7 @@ if($_POST['mid']!='')
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select missionID, locationID, locationOrder, showOnMap from $table");
+$stmt = $db->prepare("select missionID, locationID, locationOrder, showOnMap from $table order by missionID asc,locationOrder asc");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";

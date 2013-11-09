@@ -53,7 +53,7 @@ CREATE TABLE checkin (
   KEY missionID (missionID),
   CONSTRAINT checkin_ibfk_1 FOREIGN KEY (userID) REFERENCES `user` (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT checkin_ibfk_2 FOREIGN KEY (missionID) REFERENCES mission (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,9 +71,9 @@ CREATE TABLE location (
   latSin double NOT NULL,
   latCos double NOT NULL,
   `name` varchar(100) NOT NULL,
-  photoCheckIn tinyint(1) NOT NULL DEFAULT '0',
+  photoCheckIn tinyint(1) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +96,7 @@ CREATE TABLE mission (
   minuteLimit int(11) NOT NULL,
   badgeName varchar(100) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE missionimage (
   PRIMARY KEY (id),
   KEY missionID (missionID),
   CONSTRAINT missionimage_ibfk_1 FOREIGN KEY (missionID) REFERENCES mission (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -52,6 +52,17 @@ function zoomMapForm()
 	var lat = document.getElementsByName("lat")[0].value;
 	var lng = document.getElementsByName("lng")[0].value;
 	var rad = document.getElementsByName("radius")[0].value;
+
+	if(lng=="" && lat!="")
+	{
+		var latlng = lat.split(',');
+		if(latlng.length==2)
+		{
+			lat = document.getElementsByName("lat")[0].value = latlng[0];
+			lng = document.getElementsByName("lng")[0].value = latlng[1];
+		}
+	}
+	
 	if(lat!="" && lng!="") zoomMap(lat, lng, rad);
 }
 

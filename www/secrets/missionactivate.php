@@ -19,7 +19,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	$stmt->close();
 	
 	$stmt = $db->prepare("select missionlocation.locationOrder, ".
-	"location.lat, location.lng, location.radius from location, missionlocation ".
+	"location.lat, location.lng, location.radius, location.photoCheckIn from location, missionlocation ".
 	"where missionlocation.missionID=? and missionlocation.locationID=location.id ".
 	"order by locationOrder ASC");
 	$stmt->bind_param('d', $_POST['missionID']);
@@ -29,9 +29,19 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	{
 		$result['locations'][] = copyArray($rows);
 	}
-
 	$stmt->close();
+	
+	$stmt = $db->prepare("select count(locationOrder) from missionlocation where missionID = ?");
+	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->execute();
+	$stmt->bind_result($count);
+	$stmt->fetch();
 	$db->close();
+	
+	if($count==3 || $count==2) $stars = 2;
+	else if($count==1) $stars = 1;
+	else $stars = 3;
+	$result['numStars'] = $stars;
 	
 	$result['OK'] = 1;
 	
