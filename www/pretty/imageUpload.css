@@ -1,0 +1,22 @@
+.bar
+{
+	background-color: #B4F5B4;
+	width:0%;
+	height:20px
+}
+.percent
+{
+	border: 2px solid black;
+}
+#status
+{
+	border: 2px solid green;
+}
+body
+{
+	width:98%;
+}
+#preview
+{
+	width:150px;
+}
