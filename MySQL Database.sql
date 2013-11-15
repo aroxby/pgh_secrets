@@ -71,7 +71,6 @@ CREATE TABLE location (
   latSin double NOT NULL,
   latCos double NOT NULL,
   `name` varchar(100) NOT NULL,
-  photoCheckIn tinyint(1) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -95,6 +94,7 @@ CREATE TABLE mission (
   endDate timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   timeEstimate int(11) NOT NULL,
   showLocations tinyint(1) NOT NULL,
+  photo tinyint(1) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

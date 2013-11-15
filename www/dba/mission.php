@@ -46,41 +46,49 @@ if(is_numeric($_POST['removeRow']))
 
 if($_POST['name']!='')
 {
-	$stmt = $db->prepare("insert into $table(name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, timeEstimate, showLocations) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$stmt = $db->prepare("insert into $table(name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, timeEstimate, showLocations, photoCheckin) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	$stmt->bind_param(
 		'sssssissii', $_POST['name'], $_POST['desc'], $_POST['neighborhood'], $_POST['type'], $_POST['tags'], $orderd,
 		$_POST['startdate'], $_POST['enddate'], $_POST['limit'],
-		$ShowLocations
+		$ShowLocations, $photo
 	);
 	$orderd = isset($_POST['ordered']);
 	$ShowLocations = isset($_POST['showLocations']);
+	$photo = isset($_POST['photo']);
 	$stmt->execute();
 	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error inserting rows: ".htmlspecialchars($db->error)."</div>\n";
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, timeEstimate, showLocations from $table");
+$stmt = $db->prepare("select id, name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, timeEstimate, showLocations, photo from $table");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
 echo "<tr><th>ID</th><th>Name</th><th>Description</th><th>Neighborhood</th><th>Type</th><th>Tags</th>".
 "<th>Locations Ordered</th>".
 "<th>Start Date</th><th>End Date</th><th>Time Limit</th>".
-"<th>Show Locations</th>";
+"<th>Show Locations</th><th>Photo Mission</th>";
 echo "<td></td></tr>\n";
 
 $stmt->execute();
-$stmt->bind_result($id, $name, $desc, $neighborhood, $type, $tags, $ordered, $startdate, $enddate , $limit, $ShowLocations);
+$stmt->bind_result($id, $name, $desc, $neighborhood, $type, $tags, $ordered, $startdate, $enddate , $limit, $ShowLocations, $photo);
 
 while($stmt->fetch())
 {
 	echo "<tr>".
 	"<td>$id</td><td>$name</td><td><pre>".htmlspecialchars($desc)."</pre></td><td>$neighborhood</td><td>$type</td><td>$tags</td>";
+	
 	if(is_numeric($ordered) && $ordered>0) echo "<td><input type=\"checkbox\" disabled=\"disabled\" checked=\"checked\"/></td>";
 	else echo "<td><input type=\"checkbox\" disabled=\"disabled\" /></td>";
+	
 	echo "<td>$startdate</td><td>$enddate</td><td>$limit</td>";
+	
 	if(is_numeric($ShowLocations) && $ShowLocations>0) echo "<td><input type=\"checkbox\" disabled=\"disabled\" checked=\"checked\"/></td>";
 	else echo "<td><input type=\"checkbox\" disabled=\"disabled\" /></td>";
+	
+	if(is_numeric($photo) && $photo>0) echo "<td><input type=\"checkbox\" disabled=\"disabled\" checked=\"checked\"/></td>";
+	else echo "<td><input type=\"checkbox\" disabled=\"disabled\" /></td>";
+	
 	echo "<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeRow($id)\">X</a></td>".
 	"</tr>\n";
 }
@@ -105,6 +113,7 @@ $db->close();
 <tr><td>End Date</td><td><input name="enddate" type="date" /></td></tr>
 <tr><td>Time Estimate (in Minutes)</td><td><input name="limit" type="text" /></td></tr>
 <tr><td>Show Locations</td><td><input name="showLocations" type="checkbox" /></td></tr>
+<tr><td>Photo Mission</td><td><input name="photo" type="checkbox" /></td></tr>
 </table>
 <input type="submit"/>
 </form>

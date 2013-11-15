@@ -10,59 +10,10 @@ include(dirname(__FILE__).'/authoring.php');
 <script type="text/javascript" src="authoring.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
-
-<script type="text/javascript">
-function postImages()
-{
-	var bar = $('.bar');
-	var percent = $('.percent');
-	var status = $('#status');
-	var form = $('#imgFrm');
-	$.ajax({
-		type: 'POST',
-		url: 'imageUploadHandler.php',
-		beforeSend: function()
-		{
-			alert(data);
-			alert(">before");
-			status.empty();
-			var percentVal = '0%';
-			bar.width(percentVal)
-			percent.html(percentVal);
-			alert("<before");
-		},
-		uploadProgress: function(event, position, total, percentComplete)
-		{
-			alert(">uploader");
-			var percentVal = percentComplete + '%';
-			bar.width(percentVal)
-			percent.html(percentVal);
-			alert("<uploader");
-		},
-		success: function(responseText, xhr)
-		{
-			alert(">succed");
-			var percentVal = '100%!';
-			bar.width(percentVal)
-			percent.html(percentVal);
-			status.html(responseText);
-			alert("<succed");
-		},
-		error: function(xhr)
-		{
-			alert(">error");
-			status.html("Internal Server Error");
-			alert("<error");
-		}
-	});
-	return false;
-}
-</script>
-
 </head>
-<body>
 
-<div id="mainDiv"><form method="post" id="totalFrm" action="#">
+<body>
+<div id="mainDiv"><form method="post" id="topForm" action="#">
 <h2>So you want to author a mission?</h2>
 Creating a mission is some what confusing and time consuming, so get yourself some coffee or a snack before we get started.  Go ahead, I'll wait.
 Got it?<br/>OK, let's get started.<br/><br/>
@@ -79,26 +30,76 @@ array('userhtml'=>tagSpan('tagSpan'), 'examplehtml'=> tagSpan('tagSpanEx'))
 ); ?>
 Your mission also needs a description, to let players know what it's about and what they should do.
 <? input(7, 'Description:', 'textarea', 'description', 'Come to the Elk\'s lodge and sing along with the banjo!'); ?>
-If you're mission will only available for a certain date range, enter it below, if not skip this step.
+You should enter an estimage of how long it will take to complete your mission.
+<? input(10, 'Hours:', 'number', 'estHours', '2', array('skipreturn'=>true)); ?>
+<? input(10, 'Minuites:', 'number', 'estMinutes', '43'); ?>
+If your mission will only available for a certain date range, enter it below, if not skip this step.
 <? input(10, 'Start date:', 'date', 'startdate', '2013-08-15', array('skipreturn'=>true)); ?>
 <? input(10, 'End date:', 'date', 'enddate', '2014-05-28'); ?>
 </form></div>
-<!-- -->
-<form action="imageUploadHandler.php" method="post" id="imgFrm" enctype="multipart/form-data" onsubmit="return postImages()">
-	<input type="file" name="images[]" id="images" multiple="multiple">
-	<br/>
-	<input type="submit" value="Upload File to Server">
+
+<form action="imageUploadHandler.php" method="post" id="imgFrm" enctype="multipart/form-data">
+	<input type="submit" class="hidden" id="imgFrmSubmit" />
+	<input type="file" name="userImage" id="userImage" class="hidden" onchange="document.getElementById('imgFrmSubmit').click()" accept="image/*">
+	<input type="button" value="Add Image" onclick="document.getElementById('userImage').click()" />
 </form>
 
 <div class="progress">
 	<div class="bar"></div >
 	<div class="percent">0%</div >
 </div>
-<div id="status"></div>
-<img id="preview">
-<!-- -->
-
-
 
 </body>
+
+<script type="text/javascript">
+function dump(x)
+{
+	var s = '';
+	for(y in x)
+	{
+		s += '' + y + '->' + x[y] + '\n';
+	}
+	alert(s);
+}
+
+(function()
+{
+	var bar = $('.bar');
+	var percent = $('.percent');
+	$('#imgFrm').ajaxForm({
+		beforeSend: function()
+		{
+			var percentVal = '0%';
+			bar.width(percentVal)
+			percent.html(percentVal);
+		},
+		uploadProgress: function(event, position, total, percentComplete)
+		{
+			var percentVal = percentComplete + '%';
+			bar.width(percentVal)
+			percent.html(percentVal);
+		},
+		success: function(responseText, xhr)
+		{
+			var percentVal = '100%!';
+			bar.width(percentVal)
+			percent.html(percentVal);
+		},
+		error: function(xhr)
+		{
+			//Also need handlers for 413 and 500
+			if(xhr.status==415)
+			{
+				alert("That image type is not supported.");
+			}
+			else
+			{
+				alert("Upload failed!  Either the server is down or you have lost your internet connection.");
+			}
+		}
+	});
+
+})();
+</script>
+
 </html>

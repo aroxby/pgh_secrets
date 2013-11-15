@@ -1,0 +1,31 @@
+<html>
+<head>
+<script type = "text/javascript">
+createMore.nextID = 2;
+
+function createMore()
+{
+	var img = document.createElement('img');
+	img.src = document.getElementById('imgInput').value;
+	alert(img.src);
+	return;
+
+	var nextInput = document.createElement('input');
+	nextInput.type = 'file';
+	nextInput.name = 'images[]';
+	createMore.nextID++;
+	nextInput.onchange = createMore;
+	document.getElementById('imgFrm').appendChild(nextInput);
+}
+</script>
+
+</head>
+<body>
+<form action="imageUploadHandler.php" method="post" id="imgFrm" enctype="multipart/form-data">
+	<input type="submit">
+	<div id="ImageArea">
+		<input type="file" id="imgInput" name="images[]" onchange="createMore()">
+	</div>
+</form>
+</body>
+</html>

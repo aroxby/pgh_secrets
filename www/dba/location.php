@@ -99,7 +99,7 @@ function stripslashes(str)
 	return str;
 }
 
-function duplicate(id, lat, lng, radius, name, photo)
+function duplicate(id, lat, lng, radius, name)
 {
 	name = stripslashes(name);
 	document.getElementsByName("id")[0].value = id
@@ -107,7 +107,6 @@ function duplicate(id, lat, lng, radius, name, photo)
 	document.getElementsByName("lng")[0].value = lng;
 	document.getElementsByName("radius")[0].value = radius;
 	document.getElementsByName("name")[0].value = name;
-	document.getElementsByName("photo")[0].checked = !!photo;
 	zoomMap(lat, lng, radius);
 }
 
@@ -136,16 +135,15 @@ if(is_numeric($_POST['removeRow']))
 if($_POST['lat']!='' && $_POST['lng']!='')
 {
 	$stmt = "";
-	$photo = isset($_POST['photo']);
 	if(is_numeric($_POST['id']))
 	{
-		$stmt = $db->prepare("update $table set lat=?, lng=?, radius=?, name=?, latSin=?, latCos=?, photoCheckIn=? where id=?");
-		$stmt->bind_param( 'dddsddii', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])), $photo, $_POST['id'] );
+		$stmt = $db->prepare("update $table set lat=?, lng=?, radius=?, name=?, latSin=?, latCos=?, where id=?");
+		$stmt->bind_param( 'dddsddi', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])), $_POST['id'] );
 	}
 	else
 	{
-		$stmt = $db->prepare("insert into $table(lat, lng, radius, name, latSin, latCos, photoCheckIn) values (?, ?, ?, ?, ?, ?, ?)");
-		$stmt->bind_param( 'dddsddi', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])), $photo );
+		$stmt = $db->prepare("insert into $table(lat, lng, radius, name, latSin, latCos) values (?, ?, ?, ?, ?, ?, ?)");
+		$stmt->bind_param( 'dddsdd', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])) );
 	}
 
 	$stmt->execute();
@@ -153,15 +151,15 @@ if($_POST['lat']!='' && $_POST['lng']!='')
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, lat, lng, radius, name, photoCheckIn, latSin, latCos from $table");
+$stmt = $db->prepare("select id, lat, lng, radius, name, latSin, latCos from $table");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
-echo "<tr><th></th><th></th><th>ID</th><th>Latitude</th><th>Longitude</th><th>Radius</th><th>Name</th><th>Photo Check In</th><th>sin</th><th>cos</th>";
+echo "<tr><th></th><th></th><th>ID</th><th>Latitude</th><th>Longitude</th><th>Radius</th><th>Name</th><th>sin</th><th>cos</th>";
 echo "<td></td></tr>\n";
 
 $stmt->execute();
-$stmt->bind_result($id, $lat, $lng, $radius, $name, $photo, $sin, $cos);
+$stmt->bind_result($id, $lat, $lng, $radius, $name, $sin, $cos);
 
 while($stmt->fetch())
 {
@@ -169,9 +167,6 @@ while($stmt->fetch())
 	"<td><a class=\"zoomtext\" href=\"javascript:void(0)\" onclick=\"zoomMap($lat, $lng, $radius)\">+</td>".
 	"<td><a class=\"copyText\" href=\"javascript:void(0)\" onClick=\"duplicate($id, $lat, $lng, $radius, '".addslashes($name)."', $photo)\">&dArr;</a></td>".
 	"<td>$id</td><td>$lat</td><td>$lng</td><td>$radius</td><td>$name</td>";
-	
-	if(is_numeric($photo) && $photo!=0) echo "<td><input type=\"checkbox\" disabled=\"disabled\" checked=\"checked\"/></td>";
-	else echo "<td><input type=\"checkbox\" disabled=\"disabled\" /></td>";
 	
 	echo "<td>$sin</td><td>$cos</td>".
 	"<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeRow($id)\">X</a></td>".
@@ -195,7 +190,6 @@ $db->close();
 <tr><td>Latitude</td><td><input name="lat" type="text" size="50" /></td></tr>
 <tr><td>Longitude</td><td><input name="lng" type="text" size="50" /></td></tr>
 <tr><td>Radius (meters)</td><td><input name="radius" type="text" size="50" /></td></tr>
-<tr><td>Photo Check In</td><td><input name="photo" type="checkbox" /></td></tr>
 </table>
 <input type="submit"/>
 </form>

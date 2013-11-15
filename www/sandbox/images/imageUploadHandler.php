@@ -8,6 +8,6 @@ noCache();
 */
 
 echo "<pre>";
-print_r($_FILES['images']);
+print_r($_FILES);
 echo "</pre>";
 ?>
