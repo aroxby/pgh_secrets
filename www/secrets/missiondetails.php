@@ -15,7 +15,7 @@ if($_POST['missionID']!='')
 	$stmt->close();
 	
 	$stmt = $db->prepare("select missionlocation.locationOrder, ".
-	"location.lat, location.lng, location.radius, location.photoCheckIn from location, missionlocation ".
+	"location.lat, location.lng, location.radius from location, missionlocation ".
 	"where missionlocation.missionID=? and missionlocation.locationID=location.id ".
 	"order by locationOrder ASC");
 	$stmt->bind_param('i', $_POST['missionID']);
@@ -25,6 +25,16 @@ if($_POST['missionID']!='')
 	{
 		$result['locations'][] = copyArray($rows);
 	}
+	$stmt->close();
+	
+	
+	$stmt = $db->prepare("select photo from mission where id = ?");
+	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->execute();
+	$stmt->bind_result($photo);
+	$stmt->fetch();
+	$stmt->close();
+	$result['photo'] = $photo;
 	
 	$db->close();
 	

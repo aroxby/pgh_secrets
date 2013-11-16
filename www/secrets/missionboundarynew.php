@@ -2,19 +2,19 @@
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
     function sortPointX($a,$b){
-    	if(($a[lng] - $b[lng]) > 0 ){return 1;}
-    	else if(($a[lng] - $b[lng]) < 0 ){return -1;}
+    	if(($a['lng'] - $b['lng']) > 0 ){return 1;}
+    	else if(($a['lng'] - $b['lng']) < 0 ){return -1;}
     	else{return 0;}
-        //return $a[lng] - $b[lng];
+        //return $a['lng'] - $b['lng'];
     }
     function sortPointY($a,$b){
-    	if(($a[lat] - $b[lat]) > 0){return 1;}
-    	else if(($a[lat] - $b[lat]) < 0){return -1;}
+    	if(($a['lat'] - $b['lat']) > 0){return 1;}
+    	else if(($a['lat'] - $b['lat']) < 0){return -1;}
     	else{return 0;}
-        //return $a[lat] - $b[lat];
+        //return $a['lat'] - $b['lat'];
     }
     function isLeft($p0, $p1, $p2){
-        return ($p1[lng] - $p0[lng])*($p2[lat] - $p0[lat]) - ($p2[lng] - $p0[lng])*($p1[lat] - $p0[lat]);
+        return ($p1['lng'] - $p0['lng'])*($p2['lat'] - $p0['lat']) - ($p2['lng'] - $p0['lng'])*($p1['lat'] - $p0['lat']);
     }
     function chainHull_2D(&$P,$n,&$H){
         // the output array H[] will be used as the stack
@@ -25,9 +25,9 @@ include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
         $minmin = 0;
         $minmax = 0;
         
-        $xmin = $P[0][lng];
+        $xmin = $P[0]['lng'];
         for ($i = 1; $i < $n; $i++) {
-            if ($P[$i][lng] != $xmin) {
+            if ($P[$i]['lng'] != $xmin) {
                 break;
             }
         }
@@ -35,7 +35,7 @@ include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
         $minmax = $i - 1;
         if ($minmax == $n - 1) { // degenerate case: all x-coords == xmin
             $H[++$top] = $P[$minmin];
-            if ($P[$minmax][lat] != $P[$minmin][lat]) // a nontrivial segment
+            if ($P[$minmax]['lat'] != $P[$minmin]['lat']) // a nontrivial segment
                 $H[++$top] = $P[$minmax];
             $H[++$top] = $P[$minmin]; // add polygon endpoint
             return $top + 1;
@@ -44,9 +44,9 @@ include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
         // Get the indices of points with max x-coord and min|max y-coord
         $maxmin = 0;
         $maxmax = $n - 1;
-        $xmax = $P[$n - 1][lng];
+        $xmax = $P[$n - 1]['lng'];
         for ($i = ($n - 2); $i >= 0; $i--) {
-            if ($P[$i][lng] != $xmax) {
+            if ($P[$i]['lng'] != $xmax) {
                 break;
             }
         }
@@ -97,7 +97,7 @@ include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
                 }
             }
             
-            if ($P[$i][lng] == $H[0][lng] && $P[$i][lat] == $H[0][lat]) {
+            if ($P[$i]['lng'] == $H[0]['lng'] && $P[$i]['lat'] == $H[0]['lat']) {
                 return $top + 1; // special case (mgomes)
             }
             
@@ -140,31 +140,31 @@ if($_POST['missionID']!=''){
         $result['vertice_NUM'] = 4;
         $vertices[0] = $points[0];
         $centerpoint = $points[0];
-        $vertices[0][lat] = $points[0][lat]+0.0001;
-        $vertices[0][lng] = $points[0][lng]+0.0001;
-        $vertices[1][lat] = $points[0][lat]+0.0001;
-        $vertices[1][lng] = $points[0][lng]-0.0001;
-        $vertices[2][lat] = $points[0][lat]-0.0001;
-        $vertices[2][lng] = $points[0][lng]-0.0001;
-        $vertices[3][lat] = $points[0][lat]-0.0001;
-        $vertices[3][lng] = $points[0][lng]+0.0001;
+        $vertices[0]['lat'] = $points[0]['lat']+0.0001;
+        $vertices[0]['lng'] = $points[0]['lng']+0.0001;
+        $vertices[1]['lat'] = $points[0]['lat']+0.0001;
+        $vertices[1]['lng'] = $points[0]['lng']-0.0001;
+        $vertices[2]['lat'] = $points[0]['lat']-0.0001;
+        $vertices[2]['lng'] = $points[0]['lng']-0.0001;
+        $vertices[3]['lat'] = $points[0]['lat']-0.0001;
+        $vertices[3]['lng'] = $points[0]['lng']+0.0001;
     }
 	else if ($point_NUM == 2){
         $result['vertice_NUM'] = 4;
         $vertices[0] = $points[0];
         $vertices[1] = $points[1];
-        $centerlat = ($points[0][lat]+$points[1][lat])/2;
-        $centerlng = ($points[0][lng]+$points[1][lng])/2;
-        $centerpoint[lat] = $centerlat;
-        $centerpoint[lng] = $centerlng;
-        $vertices[0][lat] = $points[0][lat]*1.5 - $centerlat*0.5;
-        $vertices[0][lng] = $points[0][lng]*1.5 - $centerlng*0.5;
-        $vertices[2][lat] = $points[1][lat]*1.5 - $centerlat*0.5;
-        $vertices[2][lng] = $points[1][lng]*1.5 - $centerlng*0.5;
-        $vertices[1][lat] = $vertices[0][lat];
-        $vertices[1][lng] = $vertices[2][lng];
-        $vertices[3][lat] = $vertices[2][lat];
-        $vertices[3][lng] = $vertices[0][lng];
+        $centerlat = ($points[0]['lat']+$points[1]['lat'])/2;
+        $centerlng = ($points[0]['lng']+$points[1]['lng'])/2;
+        $centerpoint['lat'] = $centerlat;
+        $centerpoint['lng'] = $centerlng;
+        $vertices[0]['lat'] = $points[0]['lat']*1.5 - $centerlat*0.5;
+        $vertices[0]['lng'] = $points[0]['lng']*1.5 - $centerlng*0.5;
+        $vertices[2]['lat'] = $points[1]['lat']*1.5 - $centerlat*0.5;
+        $vertices[2]['lng'] = $points[1]['lng']*1.5 - $centerlng*0.5;
+        $vertices[1]['lat'] = $vertices[0]['lat'];
+        $vertices[1]['lng'] = $vertices[2]['lng'];
+        $vertices[3]['lat'] = $vertices[2]['lat'];
+        $vertices[3]['lng'] = $vertices[0]['lng'];
     }
 	else{
         usort($points, "sortPointX");
@@ -173,11 +173,11 @@ if($_POST['missionID']!=''){
         $centerlat = 0;
         $centerlng = 0;
         for($i = 0;$i < $result['vertice_NUM'];$i++){
-            $centerlat += $vertices[$i][lat];
-            $centerlng += $vertices[$i][lng];
+            $centerlat += $vertices[$i]['lat'];
+            $centerlng += $vertices[$i]['lng'];
         }
-        $centerpoint[lat] = $centerlat/$result['vertice_NUM'];
-        $centerpoint[lng] = $centerlng/$result['vertice_NUM'];
+        $centerpoint['lat'] = $centerlat/$result['vertice_NUM'];
+        $centerpoint['lng'] = $centerlng/$result['vertice_NUM'];
 	}
     $result['center'] = $centerpoint;
     //print_r($points[0]);

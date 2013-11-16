@@ -8,6 +8,7 @@ include(dirname(__FILE__).'/authoring.php');
 <link rel="stylesheet" type="text/css" href="authoring.css">
 <link rel="stylesheet" type="text/css" href="imageUpload.css">
 <script type="text/javascript" src="authoring.js"></script>
+<script type="text/javascript" src="imageUpload.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 </head>
@@ -49,57 +50,9 @@ If your mission will only available for a certain date range, enter it below, if
 	<div class="percent">0%</div >
 </div>
 
-</body>
+<div id="previewContaienr" style="border-style:solid">
+<input type="button" value="Add TARDIS-A" onclick="addPreviewNode('previewContaienr', 'tardisA.png')" />
+<input type="button" value="Add TARDIS-B" onclick="addPreviewNode('previewContaienr', 'tardisB.png')" /><br/>
+</div>
 
-<script type="text/javascript">
-function dump(x)
-{
-	var s = '';
-	for(y in x)
-	{
-		s += '' + y + '->' + x[y] + '\n';
-	}
-	alert(s);
-}
-
-(function()
-{
-	var bar = $('.bar');
-	var percent = $('.percent');
-	$('#imgFrm').ajaxForm({
-		beforeSend: function()
-		{
-			var percentVal = '0%';
-			bar.width(percentVal)
-			percent.html(percentVal);
-		},
-		uploadProgress: function(event, position, total, percentComplete)
-		{
-			var percentVal = percentComplete + '%';
-			bar.width(percentVal)
-			percent.html(percentVal);
-		},
-		success: function(responseText, xhr)
-		{
-			var percentVal = '100%!';
-			bar.width(percentVal)
-			percent.html(percentVal);
-		},
-		error: function(xhr)
-		{
-			//Also need handlers for 413 and 500
-			if(xhr.status==415)
-			{
-				alert("That image type is not supported.");
-			}
-			else
-			{
-				alert("Upload failed!  Either the server is down or you have lost your internet connection.");
-			}
-		}
-	});
-
-})();
-</script>
-
-</html>
+</body></html>
