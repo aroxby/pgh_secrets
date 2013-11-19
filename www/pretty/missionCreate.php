@@ -7,10 +7,10 @@ include(dirname(__FILE__).'/authoring.php');
 <title>Create Mission - Pittsburgh Secrets</title>
 <link rel="stylesheet" type="text/css" href="authoring.css">
 <link rel="stylesheet" type="text/css" href="imageUpload.css">
-<script type="text/javascript" src="authoring.js"></script>
-<script type="text/javascript" src="imageUpload.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript" src="authoring.js"></script>
+<script type="text/javascript" src="imageUpload.js"></script>
 </head>
 
 <body>
@@ -45,14 +45,14 @@ If your mission will only available for a certain date range, enter it below, if
 	<input type="button" value="Add Image" onclick="document.getElementById('userImage').click()" />
 </form>
 
-<div class="progress">
-	<div class="bar"></div >
-	<div class="percent">0%</div >
+<div id="previewContainer" style="border-style:solid">
+<input type="button" value="Add newImage" onclick="addUploadNode('previewContainer')" />
+<input type="button" value="Add TARDIS-A" onclick="addPreviewNode('previewContainer', 'tardisA.png')" /><br/>
 </div>
 
-<div id="previewContaienr" style="border-style:solid">
-<input type="button" value="Add TARDIS-A" onclick="addPreviewNode('previewContaienr', 'tardisA.png')" />
-<input type="button" value="Add TARDIS-B" onclick="addPreviewNode('previewContaienr', 'tardisB.png')" /><br/>
-</div>
+</body>
 
-</body></html>
+<script type="text/javascript">
+</script>
+
+</html>

@@ -134,15 +134,15 @@ if(is_numeric($_POST['removeRow']))
 
 if($_POST['lat']!='' && $_POST['lng']!='')
 {
-	$stmt = "";
+	$stmt = false;
 	if(is_numeric($_POST['id']))
 	{
-		$stmt = $db->prepare("update $table set lat=?, lng=?, radius=?, name=?, latSin=?, latCos=?, where id=?");
+		$stmt = $db->prepare("update $table set lat=?, lng=?, radius=?, name=?, latSin=?, latCos=? where id=?");
 		$stmt->bind_param( 'dddsddi', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])), $_POST['id'] );
 	}
 	else
 	{
-		$stmt = $db->prepare("insert into $table(lat, lng, radius, name, latSin, latCos) values (?, ?, ?, ?, ?, ?, ?)");
+		$stmt = $db->prepare("insert into $table(lat, lng, radius, name, latSin, latCos) values (?, ?, ?, ?, ?, ?)");
 		$stmt->bind_param( 'dddsdd', $_POST['lat'], $_POST['lng'], $_POST['radius'], $_POST['name'], sin(deg2rad($_POST['lat'])), cos(deg2rad($_POST['lat'])) );
 	}
 
@@ -165,7 +165,7 @@ while($stmt->fetch())
 {
 	echo "<tr>".
 	"<td><a class=\"zoomtext\" href=\"javascript:void(0)\" onclick=\"zoomMap($lat, $lng, $radius)\">+</td>".
-	"<td><a class=\"copyText\" href=\"javascript:void(0)\" onClick=\"duplicate($id, $lat, $lng, $radius, '".addslashes($name)."', $photo)\">&dArr;</a></td>".
+	"<td><a class=\"copyText\" href=\"javascript:void(0)\" onClick=\"duplicate($id, $lat, $lng, $radius, '".addslashes($name)."')\">&dArr;</a></td>".
 	"<td>$id</td><td>$lat</td><td>$lng</td><td>$radius</td><td>$name</td>";
 	
 	echo "<td>$sin</td><td>$cos</td>".

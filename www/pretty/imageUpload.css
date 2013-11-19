@@ -5,15 +5,19 @@
 	height:0px;
 	display:none;
 }
-.bar
+.progressBarContainer
 {
-	background-color: #B4F5B4;
-	width:0%;
+	width:200px;
 	height:20px;
+	display:inline-block;
+	position: relative;
+	left:-200px;
+	margin-right:-200px;
 }
-.percent
+.progressBar
 {
-	border: 2px solid black;
+	width:0%;
+	background-color: #00CC00;
 }
 .removeIcon
 {
@@ -30,4 +34,20 @@
 	display:inline;
 	margin-left:8px;
 	margin-right:8px;
+}
+.previewImage
+{
+	max-width:200px;
+	max-height:200px;
+}
+.uploadingImage
+{
+	display:inline;
+	margin-left:8px;
+	margin-right:8px;
+	width:150px;
+	padding:25px;
+	background-image:url('camera.png');
+	background-size:200px;
+	background-position:center; 
 }

@@ -53,7 +53,7 @@ CREATE TABLE checkin (
   KEY missionID (missionID),
   CONSTRAINT checkin_ibfk_1 FOREIGN KEY (userID) REFERENCES `user` (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT checkin_ibfk_2 FOREIGN KEY (missionID) REFERENCES mission (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,12 +67,12 @@ CREATE TABLE location (
   id int(11) NOT NULL AUTO_INCREMENT,
   lat decimal(9,6) NOT NULL,
   lng decimal(9,6) NOT NULL,
-  radius decimal(9,6) NOT NULL,
+  radius decimal(18,6) NOT NULL,
   latSin double NOT NULL,
   latCos double NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +96,7 @@ CREATE TABLE mission (
   showLocations tinyint(1) NOT NULL,
   photo tinyint(1) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +152,7 @@ CREATE TABLE `user` (
   confirmedEmail tinyint(1) NOT NULL DEFAULT '0',
   `password` binary(32) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

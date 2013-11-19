@@ -2,13 +2,33 @@
 include($_SERVER['DOCUMENT_ROOT'].'/scripts/common.php');
 noCache();
 
-/*
-413 Request Entity Too Large
-415 Unsupported Media Type
-500 Internal Server Error
-$f = tempnam('/tmp', 'img_tmp');
-exec('(sleep 20; rm -f '.escapeshellcmd($f).') > /dev/null 2>&1 &');
-*/
+function convert_to_bytes($input)
+{
+	preg_match('/(\d+)(\w+)/', $input, $matches);
+	$type = strtolower($matches[2]);
+	switch ($type) {
+	default:
+	case "b":
+		$output = $matches[1];
+		break;
+	case "k":
+		$output = $matches[1]*1024;
+		break;
+	case "m":
+		$output = $matches[1]*1024*1024;
+		break;
+	case "g":
+		$output = $matches[1]*1024*1024*1024;
+		break;
+	}
+	return $output;
+}
+
+if($_SERVER['CONTENT_LENGTH'] > convert_to_bytes(ini_get('post_max_size')))
+{
+	header('HTTP/1.0 413 Request Entity Too Large');
+	exit;
+}
 
 @$img = $_FILES['userImage'];
 if(isset($img))
@@ -34,8 +54,17 @@ if(isset($img))
 		exit;
 	}
 	
-	//later use that crazy command to return the name of a file that will be saved for 24hrs
-	//Also, some type of encoding is called for, instead of just using the plain text
-	echo $file;
+	$newfile = tempnam('/tmp', 'mc_img_tmp');
+	move_uploaded_file($file, $newfile);
+	//Delete this file in 6 hours
+	exec('(sleep 21600; rm -f '.escapeshellarg($newfile).') > /dev/null 2>&1 &');
+	
+	//This should probably use some type of encoding
+	echo $newfile;
+}
+else
+{
+	header('HTTP/1.0 500 Internal Server Error');
+	exit;
 }
 ?>

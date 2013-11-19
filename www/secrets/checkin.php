@@ -7,10 +7,10 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	$result['error'] = "No error";
 	
 	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationOrder, location.radius ".
-	"from location, missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id and location.photoCheckIn=? and ".
+	"from location, missionlocation, mission where missionlocation.missionID=? and mission.id=? and missionlocation.locationID=location.id and mission.photo=? and ".
 	"(ACOS(SIN(?)*latsin+COS(?)*latcos*COS(radians(lng-?)))*6371000) < location.radius ORDER BY missionlocation.locationOrder ASC");
 	
-	$stmt->bind_param('iiddd', $_POST['missionID'], $photo, $latRadians, $latRadians, $_POST['lng']);
+	$stmt->bind_param('iiiddd', $_POST['missionID'], $_POST['missionID'], $photo, $latRadians, $latRadians, $_POST['lng']);
 	$photo  = intval($_POST['photo']);
 	$latRadians = deg2rad($_POST['lat']);
 	$stmt->execute();
