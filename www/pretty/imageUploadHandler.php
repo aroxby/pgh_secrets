@@ -54,13 +54,15 @@ if(isset($img))
 		exit;
 	}
 	
-	$newfile = tempnam('/tmp', 'mc_img_tmp');
+	$temp_folder = 'temp_images';
+	$path = dirname(__FILE__).'/'.$temp_folder;
+	$newfile = tempnam($path, 'mc_img_tmp');
 	move_uploaded_file($file, $newfile);
 	//Delete this file in 6 hours
 	exec('(sleep 21600; rm -f '.escapeshellarg($newfile).') > /dev/null 2>&1 &');
 	
 	//This should probably use some type of encoding
-	echo $newfile;
+	echo $temp_folder.'/'.basename($newfile);
 }
 else
 {

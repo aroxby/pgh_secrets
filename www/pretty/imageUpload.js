@@ -63,7 +63,7 @@ function addPreviewNode(parentID, src)
 	rev.className = 'removeIcon';
 	rev.onclick = function()
 	{
-		document.getElementById(div.id).remove();
+		div.parentNode.removeChild(div);
 		//An ajax post could be made to tell the server to delete the file
 		//but the risk out weighs the reward in this setup.
 	};
@@ -73,7 +73,7 @@ function addPreviewNode(parentID, src)
 	
 	div.appendChild(img);
 	div.appendChild(anchor);
-	document.getElementById(parentID).appendChild(div)
+	document.getElementById(parentID).appendChild(div);
 }
 
 function validateFileInput(inputID)
@@ -116,8 +116,8 @@ function validateFileInput(inputID)
 			var percentVal = '100%';
 			bar.width(percentVal);
 			bar.parent().parent().remove();
-			alert(responseText);
 			$('#userImage').val('');
+			addPreviewNode('previewContainer', responseText);
 		},
 		error: function(xhr)
 		{

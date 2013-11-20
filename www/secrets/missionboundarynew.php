@@ -178,6 +178,12 @@ if($_POST['missionID']!=''){
         }
         $centerpoint['lat'] = $centerlat/$result['vertice_NUM'];
         $centerpoint['lng'] = $centerlng/$result['vertice_NUM'];
+        //boarden boundary
+        for($i = 0;$i < $result['vertice_NUM']; $i++){
+            $vertices[$i]['lat'] = 1.5 * $vertices[$i]['lat'] - 0.5 * $centerpoint['lat'];
+            $vertices[$i]['lng'] = 1.5 * $vertices[$i]['lng'] - 0.5 * $centerpoint['lng'];
+        }
+        
 	}
     $result['center'] = $centerpoint;
     //print_r($points[0]);
