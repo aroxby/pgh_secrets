@@ -7,10 +7,12 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	$result['error'] = "No error";
 	
 	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationOrder, location.radius ".
-	"from location, missionlocation, mission where missionlocation.missionID=? and mission.id=? and missionlocation.locationID=location.id and mission.photo=? and ".
+	//"from location, missionlocation, mission where missionlocation.missionID=? and mission.id=? and missionlocation.locationID=location.id and mission.photo=? and ".
+	"from location, missionlocation, mission where missionlocation.missionID=? and mission.id=? and missionlocation.locationID=location.id and ".
 	"(ACOS(SIN(?)*latsin+COS(?)*latcos*COS(radians(lng-?)))*6371000) < location.radius ORDER BY missionlocation.locationOrder ASC");
 	
-	$stmt->bind_param('iiiddd', $_POST['missionID'], $_POST['missionID'], $photo, $latRadians, $latRadians, $_POST['lng']);
+	//$stmt->bind_param('iiiddd', $_POST['missionID'], $_POST['missionID'], $photo, $latRadians, $latRadians, $_POST['lng']);
+	$stmt->bind_param('iiddd', $_POST['missionID'], $_POST['missionID'], $latRadians, $latRadians, $_POST['lng']);
 	$photo  = intval($_POST['photo']);
 	$latRadians = deg2rad($_POST['lat']);
 	$stmt->execute();
@@ -33,7 +35,7 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	//update check in
 	$result['update'] = 0;
 	$result['alreadyFound'] = 0;
-	$alreadyFound = false;
+	$alreadyFound = 0;
 	foreach($missionLocations as $next)
 	{
 		//fix field name
@@ -51,18 +53,19 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 			$stmt->close();
 			$result['update'] = 1;
 			$result['locations'][] = copyArray($next);
+			
 		}
 		else
 		{
-			$alreadyFound = true;
+			$alreadyFound = 1;
 		}
 	}
 	
-	if($result['update']!==1) $result['alreadyFound'] = $alreadyFound?1:0;
+	if($result['update']!==1) $result['alreadyFound'] = $alreadyFound;
 	
 	//get total number of lacations
 	$totalLocationNUM = 0; 
-	$stmt = $db->prepare("SELECT COUNT(DISTINCT missionlocation.locationID), bit_count(usermission.progress) FROM missionlocation, usermission WHERE missionlocation.missionID=? and usermission.userID=? and usermission.missionID=?");
+	$stmt = $db->prepare("SELECT COUNT(missionlocation.locationID), bit_count(usermission.progress) FROM missionlocation, usermission WHERE missionlocation.missionID=? and usermission.userID=? and usermission.missionID=?");
 	$stmt->bind_param('iii', $_POST['missionID'], $_POST['userID'], $_POST['missionID']);
 	$stmt->execute();
 	$stmt->bind_result($totalLocationNUM, $count);
@@ -88,6 +91,19 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	
 	$result['progress'] = $count;
 	$result['totalLocations'] = $totalLocationNUM;
+	
+	/*
+	$result['update']=1;
+	$result['progress']=1;
+	$result['alreadyFound'] = 0;
+	$result['locations'][] = array(
+	'lat' => $_POST['lat'],
+	'lng' => $_POST['lng'],
+	'radius' => '1000',
+	'order' => 1
+	);
+	*/
+	
 	
 	$stmt = $db->prepare("insert ignore into checkin(userID, missionID, lat, lng, json, beforeProgress, afterProgress) values (?, ?, ?, ?, ?, ?, ?)");
 	$stmt->bind_param('iiddsii', $_POST['userID'], $_POST['missionID'], $_POST['lat'],$_POST['lng'], $debugjson, $oldProgress, $progress);
