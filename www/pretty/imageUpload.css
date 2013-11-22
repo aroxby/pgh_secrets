@@ -1,3 +1,11 @@
+#imgFrm
+{
+	text-align:left;
+}
+#previewContainer
+{
+	border: solid 1px black;
+}
 .hidden
 {
 	visibility:hidden;

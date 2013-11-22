@@ -6,11 +6,13 @@ include(dirname(__FILE__).'/authoring.php');
 <head>
 <title>Create Mission - Pittsburgh Secrets</title>
 <link rel="stylesheet" type="text/css" href="authoring.css">
+<link rel="stylesheet" type="text/css" href="maps.css">
 <link rel="stylesheet" type="text/css" href="imageUpload.css">
+<script type="text/javascript" src="authoring.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
-<script type="text/javascript" src="authoring.js"></script>
 <script type="text/javascript" src="imageUpload.js"></script>
+<script type="text/javascript" src="maps.js"></script>
 </head>
 
 <body>
@@ -37,22 +39,32 @@ You should enter an estimage of how long it will take to complete your mission.
 If your mission will only available for a certain date range, enter it below, if not skip this step.
 <? input(10, 'Start date:', 'date', 'startdate', '2013-08-15', array('skipreturn'=>true)); ?>
 <? input(10, 'End date:', 'date', 'enddate', '2014-05-28'); ?>
-</form></div>
+</form>
+<b>Things get a little harder to demonstrate here, so the right hand side examples end.  Read the text carefully.</b><br/><br/>
+Your mission needs some locations!  Drag the red marker to where you want your next location to be and then resize the blue circle to shape the check-in radius (make sure it's large!).  Once you are happy with your choices, click 'Save Location'.  You will see a list of the locations you choose appear on the left.
 
-<form action="imageUploadHandler.php" method="post" id="imgFrm" enctype="multipart/form-data">
+<div id="MapStuffz">
+
+<div id="locationControls">
+<input type="button" value="Save Location" onclick="saveLocaton()" />
+<table id="LocationTable">
+<tr><th></th><th>Latitude</th><th>Longitude</th><th>Check-In Radius (meters)</th><th></th></tr>
+</table>
+</div>
+
+<div id="MapContainer">
+</div>
+
+</div>
+<br/><br/>
+You should probably also add images to your mission.  Simply click on the add image button and choose the image you wish to add.
+<div id="previewContainer"><form action="imageUploadHandler.php" method="post" id="imgFrm" enctype="multipart/form-data">
 	<input type="submit" class="hidden" id="imgFrmSubmit" />
 	<input type="file" name="userImage" id="userImage" class="hidden" onchange="document.getElementById('imgFrmSubmit').click()" accept="image/*">
 	<input type="button" value="Add Image" onclick="document.getElementById('userImage').click()" />
 </form>
-
-<div id="previewContainer" style="border-style:solid">
-<input type="button" value="Add newImage" onclick="addUploadNode('previewContainer')" />
-<input type="button" value="Add TARDIS-A" onclick="addPreviewNode('previewContainer', 'tardisA.png')" /><br/>
 </div>
 
+</div>
 </body>
-
-<script type="text/javascript">
-</script>
-
 </html>

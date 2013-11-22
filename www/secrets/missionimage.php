@@ -16,10 +16,20 @@ if($_POST['missionID']!='')
 	}
 
 	$stmt->close();
-	$db->close();
+	
+	
+	$stmt = $db->prepare("select COUNT(imageuri) from missionimage ".
+	"where missionID = ?");
+	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->execute();
+	$stmt->bind_result($imageNUM);
+	$stmt->fetch();
+	$stmt->close();
+	$result['imageNumber'] = $imageNUM;
 	
 	$result['OK'] = 1;
 	echo json_encode($result);
+	$db->close();
 }
 else
 {

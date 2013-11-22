@@ -60,7 +60,7 @@ if($_POST['name']!='')
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, timeEstimate, showLocations, photo from $table");
+$stmt = $db->prepare("select id, name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, timeEstimate, showLocations, photo from $table order by sortOrder asc");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";

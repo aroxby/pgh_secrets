@@ -54,7 +54,7 @@ if($_POST['imguri']!='')
 	$stmt->close();
 }
 
-$stmt = $db->prepare("select id, missionID, imageURI from $table");
+$stmt = $db->prepare("select id, missionID, imageURI from $table order by missionid asc");
 
 echo "<input class=\"refreshBtn\" type=\"button\" value=\"Reload\" onclick=\"refreshPage()\" />\n";
 echo "<table id=\"dataTable\">\n";
@@ -83,7 +83,7 @@ $db->close();
 <form method="post" action="missionimage.php">
 <table>
 <tr><td>Mission ID</td><td><input name="mid" type="text" size="50"/ ></td></tr>
-<tr><td>Image URI</td><td><input name="imguri" type="text" size="50" /></td></tr>
+<tr><td>Image URI</td><td><span style="margin:0px;border:0px;padding:0xp">&nbsp;http://pgh-challenge.etc.cmu.edu</span><input name="imguri" type="text" size="50" value="/images/" /></td></tr>
 </table>
 <input type="Submit" />
 </form>

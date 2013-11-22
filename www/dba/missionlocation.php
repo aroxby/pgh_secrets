@@ -47,8 +47,19 @@ if(is_numeric($_POST['removeMID']))
 
 if($_POST['mid']!='')
 {
+	$order = $_POST['order'];
+	if($order=='')
+	{
+		$stmt = $db->prepare("select ifnull(max(locationorder),-1)+1 from $table where missionid=?");
+		$stmt->bind_param('i', $_POST['mid']);
+		$stmt->bind_result($order);
+		$stmt->execute();
+		$stmt->fetch();
+		$stmt->close();
+	}
+
 	$stmt = $db->prepare("insert into $table(missionID, locationID, locationOrder) values (?, ?, ?)");
-	$stmt->bind_param( 'iii', $_POST['mid'], $_POST['lid'], $_POST['order']);
+	$stmt->bind_param( 'iii', $_POST['mid'], $_POST['lid'], $order);
 	$stmt->execute();
 	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error inserting rows: ".htmlspecialchars($db->error)."</div>\n";
 	$stmt->close();

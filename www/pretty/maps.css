@@ -1,0 +1,25 @@
+#MapStuffz
+{
+	text-align:left;
+	border: solid 1px black;
+}
+
+#locationControls
+{
+	width:50%;
+	height:700px;
+	display:inline-block;
+}
+
+#MapContainer
+{
+	float:right;
+	width:49.5%;
+	height:700px;
+	display:inline-block;
+}
+
+#LocationTable,#LocationTable *
+{
+	border:1px solid black;
+}
