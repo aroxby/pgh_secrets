@@ -1,13 +1,3 @@
-function dump(x)
-{
-	var s = '';
-	for(y in x)
-	{
-		s += '' + y + '->' + x[y] + '\n';
-	}
-	alert(s);
-}
-
 function generateNextPreviewID()
 {
 	var id = generateNextPreviewID.baseString + generateNextPreviewID.nextID;
@@ -96,8 +86,8 @@ function validateFileInput(inputID)
 (function()
 {
 	var bar;
-	$('#imgFrm').ajaxForm({
-		beforeSend: function()
+	$('#ajaxImgFrm').ajaxForm({
+		beforeSubmit: function()
 		{
 			if(!validateFileInput('userImage'))
 			{

@@ -45,3 +45,9 @@ textarea
 	border:solid 1px;
 	background:lightblue;
 }
+
+#finalSubmit
+{
+	width:100%;
+	font-weight:bold;
+}

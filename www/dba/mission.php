@@ -46,7 +46,7 @@ if(is_numeric($_POST['removeRow']))
 
 if($_POST['name']!='')
 {
-	$stmt = $db->prepare("insert into $table(name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, timeEstimate, showLocations, photo) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	$stmt = $db->prepare("insert into $table(name, description, neighborhood, type, tags, locationsOrdered, startDate, endDate, timeEstimate, showLocations, photo, sortOrder) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 15)");
 	$stmt->bind_param(
 		'sssssissiii', $_POST['name'], $_POST['desc'], $_POST['neighborhood'], $_POST['type'], $_POST['tags'], $orderd,
 		$_POST['startdate'], $_POST['enddate'], $_POST['limit'],
@@ -73,6 +73,7 @@ echo "<td></td></tr>\n";
 $stmt->execute();
 $stmt->bind_result($id, $name, $desc, $neighborhood, $type, $tags, $ordered, $startdate, $enddate , $limit, $ShowLocations, $photo);
 
+$missionCount = 0;
 while($stmt->fetch())
 {
 	echo "<tr>".
@@ -91,8 +92,10 @@ while($stmt->fetch())
 	
 	echo "<td><a class=\"deletetext\" href=\"javascript:void(0)\" onclick=\"removeRow($id)\">X</a></td>".
 	"</tr>\n";
+	
+	$missionCount++;
 }
-echo "</table>\n";
+echo "</table>\n<hr/>Total Missions: $missionCount\n";
 
 $stmt->close();
 $db->close();

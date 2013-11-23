@@ -11,15 +11,48 @@
 	display:inline-block;
 }
 
+#locationFormControls
+{
+	height:30px;
+}
+
+#locationTableContainer
+{
+	height:670px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	display:block;
+}
+
 #MapContainer
 {
 	float:right;
-	width:49.5%;
+	width:50%;
 	height:700px;
 	display:inline-block;
+	margin-left:-100%;
 }
 
-#LocationTable,#LocationTable *
+#LocationTable
+{
+	width:100%;
+}
+
+#LocationTable,#LocationTable tr,th
 {
 	border:1px solid black;
+}
+
+#orderingCheckbox
+{
+	margin-left:10%;
+	display:inline;
+	border:1px solid black;
+}
+
+.deleteText
+{
+	text-decoration:none;
+	color:red;
+	font-weight:bold;
 }

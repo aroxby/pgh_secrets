@@ -59,6 +59,7 @@ if(isset($img))
 	$newfile = tempnam($path, 'mc_img_tmp');
 	move_uploaded_file($file, $newfile);
 	//Delete this file in 6 hours
+	//there are manybetter ways to accomplish this task but they are exponentially more complex
 	exec('(sleep 21600; rm -f '.escapeshellarg($newfile).') > /dev/null 2>&1 &');
 	
 	//This should probably use some type of encoding

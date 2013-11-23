@@ -1,11 +1,12 @@
 <?php
+//tpye neightborhood
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
 if($_POST['missionID']!='')
 {
 	$db = connectDB();
 	
-	$stmt = $db->prepare("select name, type, description, showLocations from mission ".
+	$stmt = $db->prepare("select name, type, neighborhood, description, showLocations from mission ".
 	"where ((year(startDate)<=0) or (year(startDate)>0 and now() between startDate and endDate)) and mission.id=?");
 	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
@@ -39,6 +40,7 @@ if($_POST['missionID']!='')
 	$db->close();
 	
 	$result['OK'] = 1;
+	
 	echo json_encode($result);
 }
 else
