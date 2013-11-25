@@ -15,6 +15,8 @@ if($_POST['missionID']!='')
 	$result = $row;
 	$stmt->close();
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
 	$stmt = $db->prepare("select missionlocation.locationOrder, ".
 	"location.lat, location.lng, location.radius from location, missionlocation ".
 	"where missionlocation.missionID=? and missionlocation.locationID=location.id ".
@@ -28,14 +30,34 @@ if($_POST['missionID']!='')
 	}
 	$stmt->close();
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$stmt = $db->prepare("select photo from mission where id = ?");
-	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
 	$stmt->bind_result($photo);
 	$stmt->fetch();
 	$stmt->close();
 	$result['photo'] = $photo;
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	$result['numStars'] = 0;
+	
+	$stmt = $db->prepare("select count(locationOrder) from missionlocation where missionID = ?");
+	$stmt->bind_param('i', $_POST['missionID']);
+	$stmt->execute();
+	$stmt->bind_result($count);
+	$stmt->fetch();
+	$stmt->close();
+	
+	if($count==1) $result['numStars'] += 1;
+	else if($count==2 || $count==3) $result['numStars'] += 2;
+	else $result['numStars'] += 3;
+	
+	$stmt->close();
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////
 	
 	$db->close();
 	

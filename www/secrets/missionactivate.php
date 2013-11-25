@@ -6,7 +6,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	$db = connectDB();
 	
 	$stmt = $db->prepare("insert ignore into usermission(userID, missionID) values (?, ?)");
-	$stmt->bind_param('dd', $_POST['userID'], $_POST['missionID']);
+	$stmt->bind_param('ii', $_POST['userID'], $_POST['missionID']);
 	$stmt->execute();
 	if($stmt->error!=="")
 	{
@@ -22,7 +22,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	"location.lat, location.lng, location.radius from location, missionlocation ".
 	"where missionlocation.missionID=? and missionlocation.locationID=location.id ".
 	"order by locationOrder ASC");
-	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
 	bind_array($stmt, $rows);
 	while($stmt->fetch())
@@ -32,7 +32,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	$stmt->close();
 	
 	$stmt = $db->prepare("select photo from mission where id = ?");
-	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
 	$stmt->bind_result($photo);
 	$stmt->fetch();
@@ -40,7 +40,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='' )
 	$result['photo'] = $photo;
 	
 	$stmt = $db->prepare("select count(locationOrder) from missionlocation where missionID = ?");
-	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
 	$stmt->bind_result($count);
 	$stmt->fetch();

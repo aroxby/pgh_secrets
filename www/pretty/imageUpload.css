@@ -3,13 +3,15 @@
 	border: solid 1px black;
 	text-align:left;
 }
-.hidden
+
+.hiddenForImage
 {
 	visibility:hidden;
 	width:0px;
 	height:0px;
 	display:none;
 }
+
 .progressBarContainer
 {
 	width:200px;
@@ -19,33 +21,39 @@
 	left:-200px;
 	margin-right:-200px;
 }
+
 .progressBar
 {
 	width:0%;
 	background-color: #00CC00;
 }
+
 .removeIcon
 {
 	vertical-align: top;
 }
+
 .removeAnchor
 {
 	position: relative;
 	left:-32px;
 	margin-right:-32px;
 }
+
 .uploadPreview
 {
 	display:inline;
 	margin-left:8px;
 	margin-right:8px;
 }
+
 .previewImage
 {
 	max-width:200px;
 	max-height:200px;
 	vertical-align: top;
 }
+
 .uploadingImage
 {
 	display:inline;

@@ -7,7 +7,7 @@ if($_POST['missionID']!='')
 	
 	$stmt = $db->prepare("select imageuri from missionimage ".
 	"where missionID = ?");
-	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
 	bind_array($stmt, $rows);
 	while($stmt->fetch())
@@ -20,7 +20,7 @@ if($_POST['missionID']!='')
 	
 	$stmt = $db->prepare("select COUNT(imageuri) from missionimage ".
 	"where missionID = ?");
-	$stmt->bind_param('d', $_POST['missionID']);
+	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
 	$stmt->bind_result($imageNUM);
 	$stmt->fetch();

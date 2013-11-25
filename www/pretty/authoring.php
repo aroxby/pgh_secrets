@@ -38,7 +38,9 @@ function input($size, $label, $type, $name, $exampleValue, $extra = array())
 	inputField('inputItem', $size, $label, $type, $name, '', '', @$extra['userhtml']);
 	inputCell('inputCell grayed');
 	inputLabel($label, 'inputItem');
-	inputField('inputItem grayed', $size, $label, $type, $name.'Ex', $exampleValue, 'readonly="readonly"', @$extra['examplehtml']);
+	$exampleReadOnly = 'readonly="readonly"';
+	if($type=='checkbox') $exampleReadOnly = 'disabled="disabled"';
+	inputField('inputItem grayed', $size, $label, $type, $name.'Ex', $exampleValue, $exampleReadOnly, @$extra['examplehtml']);
 	inputClose(!isset($extra['skipreturn']));
 }
 

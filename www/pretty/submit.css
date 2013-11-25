@@ -1,0 +1,19 @@
+.hiddenForSubmit
+{
+	visibility:hidden;
+	width:0px;
+	height:0px;
+	display:none;
+}
+
+
+#finalSubmit
+{
+	width:100%;
+	font-weight:bold;
+}
+
+.submitStatus
+{
+	margin: 0px;
+}

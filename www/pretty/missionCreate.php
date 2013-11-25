@@ -6,8 +6,9 @@ include(dirname(__FILE__).'/authoring.php');
 <head>
 <title>Create Mission - Pittsburgh Secrets</title>
 <link rel="stylesheet" type="text/css" href="authoring.css">
-<link rel="stylesheet" type="text/css" href="maps.css">
 <link rel="stylesheet" type="text/css" href="imageUpload.css">
+<link rel="stylesheet" type="text/css" href="maps.css">
+<link rel="stylesheet" type="text/css" href="submit.css">
 <script type="text/javascript" src="authoring.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
@@ -40,6 +41,8 @@ You should enter an estimage of how long it will take to complete your mission.
 If your mission will only available for a certain date range, enter it below, if not skip this step.
 <? input(10, 'Start date:', 'date', 'startdate', '2013-08-15', array('skipreturn'=>true)); ?>
 <? input(10, 'End date:', 'date', 'enddate', '2014-05-28'); ?>
+Should the user 'check in' to this mission by taking photographs?  If so, check this box.
+<? input(10, 'Photo-Based Check in', 'checkbox', 'photo', ''); ?>
 </form>
 <b>Things get a little harder to demonstrate here, so the right hand side examples end.  Read the text carefully.</b><br/><br/>
 Your mission needs some locations!  Drag the red marker to where you want your next location to be and then resize the blue circle to shape the check-in radius (make sure it's large!  The iPhone GPS is only accurate to 5 meters, so you should add 10m of padding to your radius).  Once you are happy with your choices, click 'Save Location'.  You will see a list of the locations you chose appear on the left.  You can click on the <img src="Magnify.gif" /> to review a location or the <span class="deleteText">X</span> to remove a location.
@@ -50,7 +53,9 @@ Your mission needs some locations!  Drag the red marker to where you want your n
 <div id="locationFormControls">
 <form id="locationForm">
 <input type="button" value="Save Location" onclick="saveLocaton()" />
-<div id="orderingCheckbox"><label>User must visit locations in this exact order</label><input type="checkbox" /></div>
+<div id="orderingCheckbox">
+<label>User must visit locations in this exact order</label>
+<input type="checkbox" id="ordered"/></div>
 </form>
 </div>
 <div id="locationTableContainer">
@@ -67,8 +72,8 @@ Your mission needs some locations!  Drag the red marker to where you want your n
 You should probably also add images to your mission.  Simply click on the add image button and choose the image you wish to add.
 <div id="previewContainer">
 <form action="imageUploadHandler.php" method="post" id="ajaxImgFrm" enctype="multipart/form-data">
-	<input type="submit" class="hidden" id="imgFrmSubmit" />
-	<input type="file" name="userImage" id="userImage" class="hidden" onchange="document.getElementById('imgFrmSubmit').click()" accept="image/*">
+	<input type="submit" class="hiddenForImage" id="imgFrmSubmit" />
+	<input type="file" name="userImage" id="userImage" class="hiddenForImage" onchange="document.getElementById('imgFrmSubmit').click()" accept="image/*">
 	<input type="button" value="Add Image" onclick="document.getElementById('userImage').click()" />
 </form>
 </div>
@@ -81,18 +86,19 @@ When you're finished, press the 'Save Mission' button (only once).
 <input type="hidden" id="final_tags" name="tags" />
 <input type="hidden" id="final_description" name="description" />
 <input type="hidden" id="final_estHours" name="estHours" />
-<input type="hidden" id="final_name" name="estMinutes" />
-<input type="hidden" id="final_name" name="startdate" />
-<input type="hidden" id="final_name" name="enddate" />
-<input type="hidden" id="final_name" name="ordered" />
-<input type="hidden" id="final_name" name="photo" />
+<input type="hidden" id="final_estMinutes" name="estMinutes" />
+<input type="hidden" id="final_startdate" name="startdate" />
+<input type="hidden" id="final_enddate" name="enddate" />
+<input type="hidden" id="final_ordered" name="ordered" />
+<input type="hidden" id="final_photo" name="photo" />
 <input type="hidden" id="final_imageJSON" name="imageJSON" />
 <input type="hidden" id="final_locationJSON" name="locationJSON" />
-<input type="submit" class="hidden" id="completeFormSubmitConrol" />
+<input type="submit" class="hiddenForSubmit" id="completeFormSubmitConrol" />
 <input type="button" class="finalSubmit" id="finalSubmit" value="Save Mission!" onclick="masterSubmit()"/>
 </form>
 
-<span id="SavingText" class="hidden">Saving your mission DON'T LEAVE THIS PAGE</span>
+<h3 id="SavingText" class="hiddenForSubmit submitStatus">Saving your mission DON'T LEAVE THIS PAGE</h3>
+<h3 id="FinishedText" class="hiddenForSubmit submitStatus">Finsihed!  Your mission is saved.</h3>
 
 </div>
 </body>

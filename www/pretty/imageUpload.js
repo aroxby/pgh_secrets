@@ -56,6 +56,7 @@ function addPreviewNode(parentID, src)
 		div.parentNode.removeChild(div);
 		//An ajax post could be made to tell the server to delete the file
 		//but the risk out weighs the reward in this setup.
+		delete getImageJSON.Obj[div.id]
 	};
 	
 	anchor.href='javascript:void(0)';
@@ -64,6 +65,8 @@ function addPreviewNode(parentID, src)
 	div.appendChild(img);
 	div.appendChild(anchor);
 	document.getElementById(parentID).appendChild(div);
+	
+	return div.id;
 }
 
 function validateFileInput(inputID)
@@ -107,7 +110,8 @@ function validateFileInput(inputID)
 			bar.width(percentVal);
 			bar.parent().parent().remove();
 			$('#userImage').val('');
-			addPreviewNode('previewContainer', responseText);
+			var id = addPreviewNode('previewContainer', responseText);
+			getImageJSON.Obj[id] = responseText;
 		},
 		error: function(xhr)
 		{
@@ -133,5 +137,16 @@ function validateFileInput(inputID)
 			$('#userImage').val('');
 		}
 	});
-
 })();
+
+
+function getImageJSON()
+{
+	var newObj = [];
+	for(i in getImageJSON.Obj)
+	{
+		newObj.push(getImageJSON.Obj[i]);
+	}
+	return JSON.stringify(newObj);
+}
+getImageJSON.Obj = {};
