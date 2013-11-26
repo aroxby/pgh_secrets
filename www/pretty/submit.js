@@ -78,7 +78,7 @@ function complete(success)
 		success: function(responseText, xhr)
 		{
 			//alert(responseText);
-			//complete(true);
+			complete(true);
 		},
 		error: function(xhr)
 		{
