@@ -14,8 +14,8 @@ header("Pragma: no-cache");
 <script type="text/javascript">
 function removeRow(id)
 {
-	//document.getElementsByName("removeRow")[0].value = id;
-	//document.getElementById("removalFrm").submit();
+	document.getElementsByName("removeRow")[0].value = id;
+	document.getElementById("removalFrm").submit();
 }
 
 function refreshPage()
@@ -35,7 +35,6 @@ if(mysqli_connect_errno())
 	Die();
 }
 
-/*
 if(is_numeric($_POST['removeRow']))
 {
 	$stmt = $db->prepare("delete from $table where id = ?");
@@ -44,7 +43,6 @@ if(is_numeric($_POST['removeRow']))
 	if($stmt->affected_rows<=0) echo "<div class=\"errortext\">Error removing rows: ".htmlspecialchars($db->error)."</div>\n";
 	$stmt->close();
 }
-*/
 
 if($_POST['name']!='')
 {

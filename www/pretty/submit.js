@@ -28,28 +28,54 @@ function startPulseText(jqNode)
 
 function copyElements()
 {
-	//var ids = ['name', 'neighborhood', 'tags', 'description', 'estHours', 'estMinutes', 'startdate', 'enddate', 'ordered', 'photo', 'imageJSON', 'locationJSON'];
-	var ids = ['name', 'neighborhood', 'tags', 'description', 'estHours', 'estMinutes', 'startdate', 'enddate', 'ordered', 'photo'];
+	var ids = ['name', 'neighborhood', 'type', 'description', 'tags', 'shown', 'estHours', 'estMinutes', 'startdate', 'enddate', 'ordered', 'photo'];
+	var requiredRange = 4;
 	for(var i = 0; i<ids.length; i++)
 	{
 		var node = document.getElementById(ids[i]);
 		var val = node.type=='checkbox'?node.checked:node.value;
+		//Possible optimization point: use two loops
+		if(i<requiredRange && val=='')
+		{
+			var name = ids[i];
+			//HACK
+			if(name=='type') name = 'category';
+			alert('You MUST enter a value for ' + name + '!');
+			return false;
+		}
+		
 		document.getElementById('final_'+ids[i]).value = val;
 	}
 	
 	document.getElementById('final_imageJSON').value = getImageJSON();
-	document.getElementById('final_locationJSON').value = getLocationJSON();
+
+	var locJson = getLocationJSON();
+	if(locJson===0)
+	{
+		return false;
+	}
+	else if(locJson==='[]')
+	{
+		alert('You must save at least one location!');
+		return false;
+	}
+	document.getElementById('final_locationJSON').value = locJson;
+	
+	return true;
 }
 
-function masterSubmit()
+function masterSubmit(keepBtn)
 {
-	$('#finalSubmit').prop('disabled', true);
-	
-	$('#SavingText').removeClass('hiddenForSubmit');
-	
-	copyElements();
-	
-	$('#completeFormSubmitConrol').click();
+	if(keepBtn==0) $('#finalSubmit').prop('disabled', true);
+	if(copyElements())
+	{
+		$('#SavingText').removeClass('hiddenForSubmit');
+		$('#completeFormSubmitConrol').click();
+	}
+	else
+	{
+		$('#finalSubmit').prop('disabled', false);
+	}
 }
 
 function complete(success)
@@ -78,6 +104,9 @@ function complete(success)
 		success: function(responseText, xhr)
 		{
 			//alert(responseText);
+			node = document.getElementById('php-sql');
+			if(node) node.innerText = responseText;
+			
 			complete(true);
 		},
 		error: function(xhr)

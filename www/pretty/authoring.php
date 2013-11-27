@@ -20,8 +20,20 @@ function inputLabel($label, $class)
 
 function inputField($class, $size, $label, $type, $name, $value, $extraAttributes, $extraHTML)
 {
-	if($type=='textarea') echo '<textarea class="'.$class.'" style="width:98%" rows="'.$size.'" " id="'.$name.'" '.$extraAttributes.' >'.$value.'</textarea>'.$extraHTML.'</td>';
-	else echo '<input class="'.$class.'" min="0" size="'.$size.'" type="'.$type,'" id="'.$name.'" value="'.$value.'" '.$extraAttributes.' />'.$extraHTML.'</td>';
+	$valueHTML = '';
+	if($type=='checkbox')
+	{
+		if($value=='true') $valueHTML = 'checked="checked"';
+		else $valueHTML = '';
+	}
+	else if($type=='select')
+	{
+		$valueHTML = $value;
+	}
+	else $valueHTML = 'value="'.$value.'"';
+	if($type==='textarea') echo '<textarea class="'.$class.'" style="width:98%" rows="'.$size.'" " id="'.$name.'" '.$extraAttributes.' >'.$value.'</textarea>'.$extraHTML.'</td>';
+	else if($type==='select') echo '<select class="'.$class.'" id="'.$name.'" '.$extraAttributes.'>'.$valueHTML.'</select>'.$extraHTML.'</td>';
+	else echo '<input class="'.$class.'" min="0" size="'.$size.'" type="'.$type,'" id="'.$name.'" '.$valueHTML.' '.$extraAttributes.' />'.$extraHTML.'</td>';
 }
 
 function inputClose($sayReturn)
@@ -35,11 +47,11 @@ function input($size, $label, $type, $name, $exampleValue, $extra = array())
 	inputTable();
 	inputCell('inputCell');
 	inputLabel($label, 'inputItem');
-	inputField('inputItem', $size, $label, $type, $name, '', '', @$extra['userhtml']);
+	inputField('inputItem', $size, $label, $type, $name, @$extra['userVal'], '', @$extra['userhtml']);
 	inputCell('inputCell grayed');
 	inputLabel($label, 'inputItem');
 	$exampleReadOnly = 'readonly="readonly"';
-	if($type=='checkbox') $exampleReadOnly = 'disabled="disabled"';
+	if($type=='checkbox' || $type=='select') $exampleReadOnly = 'disabled="disabled"';
 	inputField('inputItem grayed', $size, $label, $type, $name.'Ex', $exampleValue, $exampleReadOnly, @$extra['examplehtml']);
 	inputClose(!isset($extra['skipreturn']));
 }
@@ -47,6 +59,18 @@ function input($size, $label, $type, $name, $exampleValue, $extra = array())
 function tagSpan($id)
 {
 	return '<br/>&#x21B3;<span id="'.$id.'"></span>';
+}
+
+function typeList($default)
+{
+	$types = array('', 'Art & Culture', 'Education & Kids', 'Health & Fitness', 'Food & Drink', 'Sports', 'Uniquely Pittsburgh');
+	$list = '';
+	foreach($types as $type)
+	{
+		if($type===$default) $list .= '<option value="'.$type.'" selected="selected">'.$type.'</option>';
+		else $list .= '<option value="'.$type.'">'.$type.'</option>';
+	}
+	return $list;
 }
 
 ?>

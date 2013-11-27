@@ -29,12 +29,14 @@ Your mission needs a name, something short that will help players figure out the
 <? input(20, 'Mission Name:', 'text', 'name', 'Elks Lodge Banjo Night'); ?>
 Next, you should include the neighborhood or general area where this mission takes players.
 <? input(20, 'Neighborhood:', 'text', 'neighborhood', 'North Side'); ?>
-You can also include "Tags" which serve as both categories and keywords for the mission.  Tags are seperated by commas.<br/>Below, you can see how your input will become tags.
+You can also include "Tags" which serve as and keywords for the mission.  Tags are seperated by commas.<br/>Below, you can see how your input will become tags.
 <? input(50, 'Tags:', 'text', 'tags', 'Music, Banjo, Elks',
 array('userhtml'=>tagSpan('tagSpan'), 'examplehtml'=> tagSpan('tagSpanEx'))
 ); ?>
 Your mission also needs a description, to let players know what it's about and what they should do.
 <? input(7, 'Description:', 'textarea', 'description', 'Come to the Elk\'s lodge and sing along with the banjo!'); ?>
+You will need to choose a category for your mission to help user's find mission that intrest them.
+<? input(7, 'Category:', 'select', 'type', typeList('Art & Culture'), array('userVal' => typeList('')) ); ?>
 You should enter an estimage of how long it will take to complete your mission.
 <? input(10, 'Hours:', 'number', 'estHours', '2', array('skipreturn'=>true)); ?>
 <? input(10, 'Minuites:', 'number', 'estMinutes', '43'); ?>
@@ -43,9 +45,11 @@ If your mission will only available for a certain date range, enter it below, if
 <? input(10, 'End date:', 'date', 'enddate', '2014-05-28'); ?>
 Should the user 'check in' to this mission by taking photographs?  If so, check this box.
 <? input(10, 'Photo-Based Check in', 'checkbox', 'photo', ''); ?>
+Should the user be able to see the locations on the map?  If you only want the user to see the mission area and have to search for the exact locations, clear this box.
+<? input(10, 'Show locations', 'checkbox', 'shown', 'true',  array('userVal' => 'true')); ?>
 </form>
-<b>Things get a little harder to demonstrate here, so the right hand side examples end.  Read the text carefully.</b><br/><br/>
-Your mission needs some locations!  Drag the red marker to where you want your next location to be and then resize the blue circle to shape the check-in radius (make sure it's large!  The iPhone GPS is only accurate to 5 meters, so you should add 10m of padding to your radius).  Once you are happy with your choices, click 'Save Location'.  You will see a list of the locations you chose appear on the left.  You can click on the <img src="Magnify.gif" /> to review a location or the <span class="deleteText">X</span> to remove a location.
+<h3>Things get a little harder to demonstrate here, so the right hand side examples end.  Read the text carefully.</h3><br/>
+Your mission needs some locations!  Drag the red marker to where you want your next location to be and then resize the blue circle to shape the check-in radius (make sure it's large!  The iPhone GPS is only accurate to 5 meters, so you should add 10m of padding to your radius).  Once you are happy with your choices, click 'Save Location'.  You will see a list of the locations you chose appear on the left.  You can click on the <img src="Magnify.gif" /> to review a location or the <span class="deleteText">X</span> to remove a location.  <br/><b>DON'T FORGET</b> to name your location, this name show up on the map annotation.
 
 <div id="MapStuffz">
 
@@ -60,7 +64,6 @@ Your mission needs some locations!  Drag the red marker to where you want your n
 </div>
 <div id="locationTableContainer">
 <table id="LocationTable">
-<tr><th>&nbsp;</th><th>Latitude</th><th>Longitude</th><th>Check-In Radius (meters)</th><th>&nbsp;</th></tr>
 </table>
 </div></div>
 
@@ -80,10 +83,11 @@ You should probably also add images to your mission.  Simply click on the add im
 
 <br/><br/>
 When you're finished, press the 'Save Mission' button (only once).
-<form id="completeForm" method="POST" action="post.php">
+<form id="completeForm" method="POST" action="postMission.php">
 <input type="hidden" id="final_name" name="name" />
 <input type="hidden" id="final_neighborhood" name="neighborhood" />
 <input type="hidden" id="final_tags" name="tags" />
+<input type="hidden" id="final_type" name="type" />
 <input type="hidden" id="final_description" name="description" />
 <input type="hidden" id="final_estHours" name="estHours" />
 <input type="hidden" id="final_estMinutes" name="estMinutes" />
@@ -91,14 +95,31 @@ When you're finished, press the 'Save Mission' button (only once).
 <input type="hidden" id="final_enddate" name="enddate" />
 <input type="hidden" id="final_ordered" name="ordered" />
 <input type="hidden" id="final_photo" name="photo" />
+<input type="hidden" id="final_shown" name="shown" />
 <input type="hidden" id="final_imageJSON" name="imageJSON" />
 <input type="hidden" id="final_locationJSON" name="locationJSON" />
 <input type="submit" class="hiddenForSubmit" id="completeFormSubmitConrol" />
-<input type="button" class="finalSubmit" id="finalSubmit" value="Save Mission!" onclick="masterSubmit()"/>
+
+<?
+if($_GET['debug']==1)
+{
+echo '<input type="button" class="finalSubmit" id="finalSubmit" value="Save Mission!" onclick="masterSubmit(1)"/>';
+}
+else
+echo '<input type="button" class="finalSubmit" id="finalSubmit" value="Save Mission!" onclick="masterSubmit(0)"/>';
+?>
+
 </form>
 
 <h3 id="SavingText" class="hiddenForSubmit submitStatus">Saving your mission DON'T LEAVE THIS PAGE</h3>
-<h3 id="FinishedText" class="hiddenForSubmit submitStatus">Finsihed!  Your mission is saved.</h3>
+<h3 id="FinishedText" class="hiddenForSubmit submitStatus">Finished!  Your mission is saved.</h3>
+
+<?
+if($_GET['debug']==1)
+{
+	echo '<textarea style="width:100%;height:500px" id="php-sql"></textarea>';
+}
+?>
 
 </div>
 </body>
