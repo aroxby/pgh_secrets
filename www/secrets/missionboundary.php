@@ -11,10 +11,14 @@ if($_POST['missionID']!=''){
 	$stmt->execute(); 
 	$stmt->bind_result($maxlat, $minlat, $maxlng, $minlng);
 	$stmt->fetch();
-	$result['maxLAT'] = 1.2 *($maxlat-$minlat) + $minlat;
-	$result['minLAT'] = $maxlat - 1.2 *($maxlat-$minlat);
-	$result['maxLNG'] = 1.2 *($maxlng-$minlng) + $minlng;;
-	$result['minLNG'] = $maxlng - 1.2 *($maxlng-$minlng);
+	//$result['maxLAT'] = 1.2 *($maxlat-$minlat) + $minlat;
+	//$result['minLAT'] = $maxlat - 1.2 *($maxlat-$minlat);
+	//$result['maxLNG'] = 1.2 *($maxlng-$minlng) + $minlng;;
+	//$result['minLNG'] = $maxlng - 1.2 *($maxlng-$minlng);
+	$result['maxLAT'] = $maxlat;
+	$result['minLAT'] = $minlat;
+	$result['maxLNG'] = $maxlng;
+	$result['minLNG'] = $minlng;
 }
 else
 {
