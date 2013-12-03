@@ -49,7 +49,9 @@ Should the user be able to see the locations on the map?  If you only want the u
 <? input(10, 'Show locations', 'checkbox', 'shown', 'true',  array('userVal' => 'true')); ?>
 </form>
 <h3>Things get a little harder to demonstrate here, so the right hand side examples end.  Read the text carefully.</h3><br/>
-Your mission needs some locations!  Drag the red marker to where you want your next location to be and then resize the blue circle to shape the check-in radius (make sure it's large!  The iPhone GPS is only accurate to 5 meters, so you should add 10m of padding to your radius).  Once you are happy with your choices, click 'Save Location'.  You will see a list of the locations you chose appear on the left.  You can click on the <img src="Magnify.gif" /> to review a location or the <span class="deleteText">X</span> to remove a location.  <br/><b>DON'T FORGET</b> to name your location, this name show up on the map annotation.
+Your mission needs some locations!  Drag the red marker to where you want your next location to be and then resize the blue circle to shape the check-in radius (make sure it's large!  The iPhone GPS is only accurate to 5 meters, so you should add 10m of padding to your radius).  Once you are happy with your choices, click 'Save Location'.  You will see a list of the locations you chose appear on the left.  You can click on the <img src="Magnify.gif" /> to review a location or the <span class="deleteText">X</span> to remove a location.
+<br/>Due to technical limitations on the GPS the please ensure your radius at least 10 meters (smaller radii may work but this is not guaranteed).
+<br/><b>DON'T FORGET</b> to name your location, this name show up on the map annotation in the app.
 
 <div id="MapStuffz">
 
@@ -74,7 +76,7 @@ Your mission needs some locations!  Drag the red marker to where you want your n
 <br/><br/>
 You should probably also add images to your mission.  Simply click on the add image button and choose the image you wish to add.
 <div id="previewContainer">
-<form action="imageUploadHandler.php" method="post" id="ajaxImgFrm" enctype="multipart/form-data">
+<form action="imageUpload.php" method="post" id="ajaxImgFrm" enctype="multipart/form-data">
 	<input type="submit" class="hiddenForImage" id="imgFrmSubmit" />
 	<input type="file" name="userImage" id="userImage" class="hiddenForImage" onchange="document.getElementById('imgFrmSubmit').click()" accept="image/*">
 	<input type="button" value="Add Image" onclick="document.getElementById('userImage').click()" />

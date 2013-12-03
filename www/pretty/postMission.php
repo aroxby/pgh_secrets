@@ -47,7 +47,8 @@ for($i = 0; $i<count($images); $i++)
 {
 	$uri = '/images/mcTool/'.basename($images[$i]);
 	
-	$src = $images[$i];
+	//Do not allow users the speificy files like /etc/passwd
+	$src = 'temp_images/'.basename($images[$i]);
 	$dst = $_SERVER['DOCUMENT_ROOT'].$uri;
 	exec('cp '.escapeshellarg($src).' '.escapeshellarg($dst).' > /dev/null 2>&1 &');
 	

@@ -1,17 +1,9 @@
-function dump(x)
+function confirmExit()
 {
-	var s = '';
-	for(y in x)
-	{
-		s += '' + y + '->' + x[y] + '\n';
-	}
-	alert(s);
+	if(!confirmExit.submitted) return "If you leave this page now your mission will not be saved!  Are you sure you want to leave?";
 }
-
-window.onbeforeunload = function()
-{
-	//return "If you leave this page now your mission will not be saved!  Are you sure you want to leave?";
-}
+confirmExit.submitted = false;
+window.onbeforeunload = confirmExit;
 
 function pulseTextStep(node)
 {
@@ -67,7 +59,7 @@ function copyElements()
 function masterSubmit(keepBtn)
 {
 	if(keepBtn==0) $('#finalSubmit').prop('disabled', true);
-	if(copyElements())
+	if( confirm('Are you sure you want to submit your mission?  You will not be able to change your mission once submitted, so be sure!') && copyElements() )
 	{
 		$('#SavingText').removeClass('hiddenForSubmit');
 		$('#completeFormSubmitConrol').click();
@@ -85,6 +77,7 @@ function complete(success)
 	if(success)
 	{
 		$('#FinishedText').removeClass('hiddenForSubmit');
+		confirmExit.submitted = true;
 	}
 	else
 	{
