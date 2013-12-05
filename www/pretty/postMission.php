@@ -19,7 +19,7 @@ $shown = $_POST['shown'];
 $locations = json_decode($_POST['locationJSON'], true);
 $images = json_decode($_POST['imageJSON'], true);
 
-$stmt = $db->prepare("insert into mission(name, neighborhood, tags, type, description, timeEstimate, startdate, enddate, locationsOrdered, photo, showLocations) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt = $db->prepare("insert into mission(name, neighborhood, tags, type, description, timeEstimate, startdate, enddate, locationsOrdered, photo, showLocations, sortOrder) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 15)");
 $stmt->bind_param('sssssissiii', $name, $neighborhood, $tags, $type, $description, $estMinutes, $startdate, $enddate, $ordered, $photo, $shown);
 $err = $stmt->execute();
 $stmt->close();
@@ -60,8 +60,8 @@ for($i = 0; $i<count($images); $i++)
 
 for($i = 0; $i<count($locations); $i++)
 {
-	$stmt = $db->prepare("insert into missionlocation(missionID, locationid) values(?, ?)");
-	$stmt->bind_param('ii', $mid, $locations[$i]['id']);
+	$stmt = $db->prepare("insert into missionlocation(missionID, locationid, locationOrder) values(?, ?, ?)");
+	$stmt->bind_param('iii', $mid, $locations[$i]['id'], $i);
 	$err = $stmt->execute();
 	$stmt->close();
 }
