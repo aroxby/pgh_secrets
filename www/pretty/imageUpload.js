@@ -49,7 +49,7 @@ function addPreviewNode(parentID, src)
 	img.src = src;
 	img.className = 'previewImage';
 	
-	rev.src = 'x.png';
+	rev.src = 'x.gif';
 	rev.className = 'removeIcon';
 	rev.onclick = function()
 	{
