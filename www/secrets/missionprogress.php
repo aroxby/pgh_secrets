@@ -15,12 +15,13 @@ if($_POST['missionID']!='' && $_POST['userID']!='')
 	$stmt->fetch();
 	$stmt->close();
 	
-	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationorder, usermission.progress&(1<<missionlocation.locationOrder)
+	$stmt = $db->prepare("select location.name, location.lat, location.lng, missionlocation.locationorder, usermission.progress&(1<<missionlocation.locationOrder)
 	from usermission,missionlocation,location
 	where usermission.missionid=?
 	and usermission.userid=?
 	and location.id=missionlocation.locationid
 	and usermission.missionid=missionlocation.missionid
+	order by missionlocation.locationorder ASC
 	");
 	$stmt->bind_param('ii', $_POST['missionID'], $_POST['userID']);
 	$stmt->execute();
