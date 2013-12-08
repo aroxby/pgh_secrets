@@ -95,7 +95,7 @@ function generateSQL()
 }
 </script>
 
-<table style="width:500px;">
+<table style="width:900px;">
 <tr><td>Sorting Order</td></tr>
 <tr><td><textarea id="sort" rows="1" onkeyup="generateSQL()" style="width:98.5%"><? echo getMapString(); ?></textarea></td></tr>
 <tr><td><input type="button" onclick="generateSQL()" value="&darr;&nbsp;&darr;&nbsp;&darr;&nbsp;&darr;&nbsp;" /></td></tr>

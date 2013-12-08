@@ -26,10 +26,9 @@ if($_POST['userID']!='' && $_POST['type']!='')
 			if($count==1) $result['numStars'] += 1;
 			else if($count==2 || $count==3) $result['numStars'] += 2;
 			else $result['numStars'] += 3;
-			$result['numStars'] += $stars;
 		}
-	
 	}
+
 	$stmt->close();
 	$db->close();
 	
