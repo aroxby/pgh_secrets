@@ -1,13 +1,17 @@
 <?php
+//Include or basic functions
 include($_SERVER['DOCUMENT_ROOT'].'/scripts/common.php');
+//Do not cache this page
 noCache();
 
+//Generates a random string
 function mt_rand_str($l, $c = 'abcdefghijklmnopqrstuvwxyz0123456789')
 {
 	for ($s = '', $cl = strlen($c)-1, $i = 0; $i < $l; $s .= $c[mt_rand(0, $cl)], ++$i);
 	return $s;
 }
 
+//Check to see if a valid name will be vaild for both locations
 function checkName($imageName)
 {
 	if(file_exists('temp_images/'.$imageName)) return false;
@@ -24,10 +28,11 @@ function generateName($prefix, $suffix)
 	Accomplishing this behavior would be easier if you create
 	and external tool and call it with exec()
 	
-	In the mean time we just use checkName() instead
+	In the mean time we just use checkName() instead, the chances of collision are less than the chances of the sun expanding the swallow the earth
 	
 	WARNING WARNING WARNING */
 	
+	//Keep generatign filename until one works for us
 	for(;;)
 	{
 		$r = mt_rand_str(16);
@@ -36,6 +41,7 @@ function generateName($prefix, $suffix)
 	}
 }
 
+//Convert a string the form of 5MB to a number for bytes
 function convert_to_bytes($input)
 {
 	preg_match('/(\d+)(\w+)/', $input, $matches);
@@ -58,6 +64,7 @@ function convert_to_bytes($input)
 	return $output;
 }
 
+//The file was over maximum size for the web server (no other data will be available)
 if($_SERVER['CONTENT_LENGTH'] > convert_to_bytes(ini_get('post_max_size')))
 {
 	header('HTTP/1.0 413 Request Entity Too Large');
@@ -67,6 +74,7 @@ if($_SERVER['CONTENT_LENGTH'] > convert_to_bytes(ini_get('post_max_size')))
 @$img = $_FILES['userImage'];
 if(isset($img))
 {
+	//The file is over maximum size for PHP engine
 	$err = $img['error'];
 	if($err===UPLOAD_ERR_INI_SIZE || $err===UPLOAD_ERR_FORM_SIZE)
 	{
@@ -74,13 +82,17 @@ if(isset($img))
 		exit;
 	}
 	
+	//The upload did not contain a file
 	if($err===UPLOAD_ERR_NO_FILE) exit;
+	
+	//Some other error
 	if($err!==UPLOAD_ERR_OK)
 	{
 		header('HTTP/1.0 500 Internal Server Error');
 		exit;
 	}
 
+	//Make sure file is an iamge
 	$file = $img['tmp_name'];
 	if(exif_imagetype($file)===false)
 	{
@@ -89,9 +101,9 @@ if(isset($img))
 	}
 	
 
+	//Generate a new  name for it
 	$temp_folder = 'temp_images';
-	$path = dirname(__FILE__).'/'.$temp_folder;
-	
+	$path = dirname(__FILE__).'/'.$temp_folder;	
 	$newfilebase = generateName('mc_img_', '.jpg');
 	$newfile = $path.'/'.$newfilebase;
 	
@@ -113,6 +125,7 @@ if(isset($img))
 }
 else
 {
+	//The upload did not contain a the correct field
 	header('HTTP/1.0 500 Internal Server Error');
 	exit;
 }

@@ -1,3 +1,4 @@
+//Include another javascript file
 function loadScript(url)
 {
 	var head = document.getElementsByTagName('head')[0];
@@ -7,14 +8,18 @@ function loadScript(url)
 	document.head.appendChild(script);
 }
 
+//Initializes the map
 function initialize()
 {
+	//Create HTML elements
 	var canvas = document.createElement('div');
 	canvas.style.cssText = 'height:100%;width:100%';
 	document.getElementById('MapContainer').appendChild(canvas);
 
+	//Centers map on the ETC
 	var center = new google.maps.LatLng(40.432767560433206, -79.96478180125808);
 
+	//Map defaults
 	var mapOptions =
 	{
 		center: center,
@@ -24,6 +29,7 @@ function initialize()
 	};
 	var map = new google.maps.Map(canvas, mapOptions);
 	
+	//The type of marker we want
 	var markerOptions = 
 	{
 		map: map,
@@ -32,6 +38,7 @@ function initialize()
 	};
 	var marker = new google.maps.Marker(markerOptions);
 	
+	//The type of circle we want
 	var circleOptions = 
 	{
 		map: map,
@@ -45,6 +52,7 @@ function initialize()
 	};
 	var circle = new google.maps.Circle(circleOptions);
 	
+	//Click/drag/drop handlers
 	marker._onDrop = function(e){marker.onDrop(e);};
 	google.maps.event.addListener(marker,'dragend',marker._onDrop);
 	map._onClick = function(e){map.onClick(e);};
@@ -53,6 +61,7 @@ function initialize()
 	google.maps.event.addListener(circle,'center_changed',circle._onChanged);
 	google.maps.event.addListener(circle,'radius_changed',circle._onChanged);
 	
+	//map re-centering function
 	map.centerOn = function(lat, lng, radius)
 	{
 		var center = new google.maps.LatLng(lat, lng);
@@ -62,14 +71,18 @@ function initialize()
 		circle.setCenter(center);
 	}
 	
+	//Tell the calling script we are done
 	initialize.callback(map, marker, circle);
 }
 
+//Called by our script loader when Google Maps API is loaded
 function initMaps()
 {
 	google.maps.event.addDomListener(window, 'load', initialize);
 }
 
+//Call this from your page when you want to start loading maps
+//This happens asynchronously so specify a callback
 function createMap(callback)
 {
 	initialize.callback = callback;
@@ -80,6 +93,7 @@ function createMap(callback)
 	loadScript(url);
 }
 
+//Create the map for the mission creator
 createMap(function(map, marker, circle)
 {
 	zoomMap.map = map;
@@ -103,11 +117,13 @@ createMap(function(map, marker, circle)
 	updateLatLng.circle = saveLocaton.circle = circle;
 });
 
+//Shows a location on the map
 function zoomMap(lat, lng, radius)
 {
 	zoomMap.map.centerOn(lat, lng, radius);
 }
 
+//Updates the map and markers to a LatLng
 function updateLatLng(ll, updateMaker, updateCircle, updateMap)
 {
 	var lat = ll.lat();
@@ -124,6 +140,7 @@ function updateLatLng(ll, updateMaker, updateCircle, updateMap)
 	}
 }
 
+//Generates a unique ID for locations in the mission creator
 function generateNextRowID()
 {
 	var id = generateNextRowID.baseString + generateNextRowID.nextID;
@@ -133,6 +150,7 @@ function generateNextRowID()
 generateNextRowID.baseString = 'mc_auto_';
 generateNextRowID.nextID = 0;
 
+//Removes a location from the table
 function removeLocation(id)
 {
 	delete getLocationJSON.Obj[id];
@@ -150,6 +168,7 @@ function removeLocation(id)
 	node.parentNode.removeChild(node);
 }
 
+//Creates a new row in the location table for location name
 function createTableNameRow(lat,lng,rad,rowID)
 {
 	var zoomAction = 'zoomMap('+lat+','+lng+','+rad+')';
@@ -163,6 +182,7 @@ function createTableNameRow(lat,lng,rad,rowID)
 	return row;
 }
 
+//Creates a new row in the location table for location label
 function createTableLabelRow(rowID)
 {
 	var row = document.createElement('tr');
@@ -172,6 +192,7 @@ function createTableLabelRow(rowID)
 	return row;
 }
 
+//Creates a new row in the location table for location data
 function createTableDataRow(lat,lng,rad,rowID)
 {
 	var removeAction = 'removeLocation(\''+rowID+'\')';
@@ -185,6 +206,7 @@ function createTableDataRow(lat,lng,rad,rowID)
 	return row;
 }
 
+//Creates an empty table row (as a spacer or whatever)
 function createTableEmptyRow(rowID)
 {
 	var row = document.createElement('tr');
@@ -193,6 +215,7 @@ function createTableEmptyRow(rowID)
 	return row;
 }
 
+//Saves a location from the map to the table
 function saveLocaton()
 {
 	var lat = saveLocaton.marker.getPosition().lat();
@@ -219,6 +242,7 @@ function saveLocaton()
 	};
 }
 
+//Creates a JSON object describing the location for final submision
 function getLocationJSON()
 {
 	var newObj = [];

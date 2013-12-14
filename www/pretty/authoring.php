@@ -1,23 +1,32 @@
 <?php
+//Include over basic and database functions
 include($_SERVER['DOCUMENT_ROOT'].'/scripts/db.php');
+//Do not allow users to navigate to this file
 dropDirectRequest(__FILE__);
+//Do not cache this file
 noCache();
 
+//These functions simply the writing of input fields
+//This function creates the main table
 function inputTable()
 {
 	echo '<table class="inputGroupTable"><tr>';
 }
 
+//This function creates a table cell for an input field
 function inputCell($class)
 {
 	echo '<td class="'.$class.'">';
 }
-
+//This function creates the label for an input field
 function inputLabel($label, $class)
 {
 	echo '<label class="'.$class.'">'.$label.'</label>';
 }
 
+//This function creates an input field
+//It makes various decisions about the needed HTML based on the type
+//Sometimes additional attributes the field are specified, or additional HTML for after the field
 function inputField($class, $size, $label, $type, $name, $value, $extraAttributes, $extraHTML)
 {
 	$valueHTML = '';
@@ -36,12 +45,14 @@ function inputField($class, $size, $label, $type, $name, $value, $extraAttribute
 	else echo '<input class="'.$class.'" min="0" size="'.$size.'" type="'.$type,'" id="'.$name.'" '.$valueHTML.' '.$extraAttributes.' />'.$extraHTML.'</td>';
 }
 
+//This function closes the table cell
 function inputClose($sayReturn)
 {
 	echo '</tr></table>';
 	if($sayReturn) echo '<br/>';
 }
 
+//This function creates an input field on the right with an example field on the left
 function input($size, $label, $type, $name, $exampleValue, $extra = array())
 {
 	inputTable();
@@ -56,11 +67,13 @@ function input($size, $label, $type, $name, $exampleValue, $extra = array())
 	inputClose(!isset($extra['skipreturn']));
 }
 
+//This function creates and styles a span for mission tags
 function tagSpan($id)
 {
 	return '<br/>&#x21B3;<span id="'.$id.'"></span>';
 }
 
+//This function returns a list of valid mission types
 function typeList($default)
 {
 	$types = array('', 'Art & Culture', 'Education & Kids', 'Health & Fitness', 'Food & Drink', 'Sports', 'Uniquely Pittsburgh');

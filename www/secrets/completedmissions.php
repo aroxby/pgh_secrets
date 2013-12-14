@@ -5,6 +5,7 @@ if($_POST['userID']!='')
 {
 	$db = connectDB();
 	
+	//Selects mission a user has accepted and checks if they are complete
 	$stmt = $db->prepare("select usermission.missionid, bit_count(progress)=count(locationorder)
 	from missionlocation,usermission
 	where userid=?

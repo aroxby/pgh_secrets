@@ -5,11 +5,10 @@ if($_POST['username']!='' /*&& $_POST['password']!=''*/)
 {
 
 	$db = connectDB();
-	
+	//validates a username/password conbination
 	$stmt = $db->prepare("select id from user where userName=? and password=? limit 1");
 	$stmt->bind_param( 'ss', $_POST['username'], $pass );
 	$pass = pack("H*" , $_POST['password']);
-	//$result['hash'] = $_POST['password'];
 	
 	$stmt->bind_result($uid);
 	$stmt->execute();

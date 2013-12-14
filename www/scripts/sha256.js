@@ -6,6 +6,8 @@
 *  Original code by Angel Marin, Paul Johnston.
 *
 **/
+
+//This is used to generate a SHA256 hash for comparing and storing passwords - Pittsburgh Challenge Team
  
 function SHA256(s){
  

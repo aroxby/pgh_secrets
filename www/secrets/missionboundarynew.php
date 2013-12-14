@@ -1,4 +1,6 @@
 <?php
+//related paper link:https://gitbub.com/mgomes/ConvexHull/pull/1/files
+//algrithm: ConvexHull
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
     function sortPointX($a,$b){

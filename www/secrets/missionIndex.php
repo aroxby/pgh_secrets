@@ -1,4 +1,8 @@
- <?php
+<?php
+
+
+/* This page generates a list of missions and is shown on our website */
+
 //no  cache headers 
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");

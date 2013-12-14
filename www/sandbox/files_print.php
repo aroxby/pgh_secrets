@@ -38,7 +38,7 @@ echo '<hr/>';
 print_r($_FILES);
 echo '<hr/>';
 $type = exif_imagetype($_FILES['userImage']['tmp_name']);
-if($type===false) $type = 'terabyte_false';
+if($type===false) $type = 'boolean_false';
 echo 'type = '.$type."\n";
 echo '<hr/>';
 ?>

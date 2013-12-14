@@ -5,6 +5,7 @@ if($_POST['userID']!='')
 {
 	$db = connectDB();
 	
+	//Retrieve all mission started by this user
 	$stmt = $db->prepare("select missionid from usermission where userid=?");
 	$stmt->bind_param('i', $_POST['userID']);
 	$stmt->execute();

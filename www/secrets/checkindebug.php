@@ -1,4 +1,5 @@
 <?php
+//Debugging version of checking, outdated
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
 if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['userID']!=''){

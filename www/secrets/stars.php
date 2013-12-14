@@ -7,6 +7,7 @@ if($_POST['userID']!='' && $_POST['type']!='')
 
 	$db = connectDB();
 	
+	//Get the number of locations a user has checked in at for a given mission category
 	$stmt = $db->prepare("select count(locationorder), bit_count(progress)=count(locationorder)
 	from missionlocation,usermission,mission
 	where userid=?
@@ -18,6 +19,7 @@ if($_POST['userID']!='' && $_POST['type']!='')
 	$stmt->execute();
 	bind_array($stmt, $row);
 	
+	//Calculate how many stars they have earned
 	while($stmt->fetch())
 	{
 		if($row['bit_count(progress)=count(locationorder)']===1)

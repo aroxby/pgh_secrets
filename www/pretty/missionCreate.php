@@ -1,10 +1,12 @@
 <?php
+//include relevant PHP code
 include(dirname(__FILE__).'/authoring.php');
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Create Mission - Pittsburgh Secrets</title>
+<!-- For each phase (general/author, images, maps, and submission) there is a .css and .js (and .php) -->
 <link rel="stylesheet" type="text/css" href="authoring.css">
 <link rel="stylesheet" type="text/css" href="imageUpload.css">
 <link rel="stylesheet" type="text/css" href="maps.css">
@@ -70,6 +72,7 @@ Your mission needs some locations!  Drag the red marker to where you want your n
 </div></div>
 
 <div id="MapContainer">
+<!-- Google Map goes here -->
 </div>
 
 </div>
@@ -85,6 +88,7 @@ You should probably also add images to your mission.  Simply click on the add im
 
 <br/><br/>
 When you're finished, press the 'Save Mission' button (only once).
+<!-- These fields hold the actual data used to create the mission -->
 <form id="completeForm" method="POST" action="postMission.php">
 <input type="hidden" id="final_name" name="name" />
 <input type="hidden" id="final_neighborhood" name="neighborhood" />
@@ -103,6 +107,8 @@ When you're finished, press the 'Save Mission' button (only once).
 <input type="submit" class="hiddenForSubmit" id="completeFormSubmitConrol" />
 
 <?
+//This debugging step will allow a mission to be submission multiple times in a row, use with caution.
+//Set ?debug=1 to activate
 if($_GET['debug']==1)
 {
 echo '<input type="button" class="finalSubmit" id="finalSubmit" value="Save Mission!" onclick="masterSubmit(1)"/>';
@@ -119,6 +125,7 @@ echo '<input type="button" class="finalSubmit" id="finalSubmit" value="Save Miss
 <?
 if($_GET['debug']==1)
 {
+	//This debugging step will you to see the text response the server after submitting a mission
 	echo '<textarea style="width:100%;height:500px" id="php-sql"></textarea>';
 }
 ?>

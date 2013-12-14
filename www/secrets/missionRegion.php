@@ -1,4 +1,7 @@
 <?php
+
+//NOT USED
+
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
 if($_POST['missionID']!=''){

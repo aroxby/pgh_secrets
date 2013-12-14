@@ -1,3 +1,4 @@
+//Ask the if they are sure they want to leave
 function confirmExit()
 {
 	if(!confirmExit.submitted) return "If you leave this page now your mission will not be saved!  Are you sure you want to leave?";
@@ -5,6 +6,7 @@ function confirmExit()
 confirmExit.submitted = false;
 window.onbeforeunload = confirmExit;
 
+//Modulates the opacity of the saving text, so the user will wait for it to finish
 function pulseTextStep(node)
 {
 	var o = node.css('opacity');
@@ -13,11 +15,13 @@ function pulseTextStep(node)
 	node.css('opacity', o);
 }
 
+//Starts the text opacity modulation
 function startPulseText(jqNode)
 {
 	setInterval(function(){pulseTextStep(jqNode);}, 50);
 }
 
+//Copies the user data to the final information form
 function copyElements()
 {
 	var ids = ['name', 'neighborhood', 'type', 'description', 'tags', 'shown', 'estHours', 'estMinutes', 'startdate', 'enddate', 'ordered', 'photo'];
@@ -56,20 +60,26 @@ function copyElements()
 	return true;
 }
 
+//Main submit function
 function masterSubmit(keepBtn)
 {
+	//Disable submit button
 	if(keepBtn==0) $('#finalSubmit').prop('disabled', true);
+	//Confirm submission
 	if( confirm('Are you sure you want to submit your mission?  You will not be able to change your mission once submitted, so be sure!') && copyElements() )
 	{
+		//good data, submit it
 		$('#SavingText').removeClass('hiddenForSubmit');
 		$('#completeFormSubmitConrol').click();
 	}
 	else
 	{
+		//bad data, allow user the revise and resubmit
 		$('#finalSubmit').prop('disabled', false);
 	}
 }
 
+//Inform user of succesfull submit
 function complete(success)
 {
 	$('#SavingText').addClass('hiddenForSubmit');
@@ -85,6 +95,7 @@ function complete(success)
 	}
 }
 
+//Submit data asynchronously
 (function()
 {
 	$('#completeForm').ajaxForm({
@@ -118,4 +129,5 @@ function complete(success)
 	});
 })();
 
+//Start pulsing the saving notification now, then we can just display it when it's needed
 window.addEventListener("load", function(){startPulseText($('#SavingText'));}, false);

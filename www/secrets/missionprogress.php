@@ -5,6 +5,7 @@ if($_POST['missionID']!='' && $_POST['userID']!='')
 {
 	$db = connectDB();
 	
+	//Get user progress for mission
 	$stmt = $db->prepare("select bit_count(progress), count(locationOrder) from usermission,missionlocation
 	where userid=?
 	and missionlocation.missionid=?
@@ -15,6 +16,8 @@ if($_POST['missionID']!='' && $_POST['userID']!='')
 	$stmt->fetch();
 	$stmt->close();
 	
+	
+	//Get locations visited by this user
 	$stmt = $db->prepare("select location.name, location.lat, location.lng, missionlocation.locationorder, usermission.progress&(1<<missionlocation.locationOrder)
 	from usermission,missionlocation,location
 	where usermission.missionid=?

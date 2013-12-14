@@ -1,4 +1,7 @@
 <?php
+
+//OLD MISSION BOUNDARY, USE MISSIONBOUNDARYNEW.PHP
+
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
 if($_POST['missionID']!=''){
@@ -6,6 +9,7 @@ if($_POST['missionID']!=''){
 	$result['OK'] = 1;
 	$result['error'] = "No error.";
 	
+	//Creates an axis-aligned rectangle for a mission
 	$stmt = $db->prepare("select max(location.lat), min(location.lat), max(location.lng), min(location.lng) from location, missionlocation where missionlocation.missionID=? and missionlocation.locationID=location.id");
 	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute(); 

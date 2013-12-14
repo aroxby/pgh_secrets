@@ -5,6 +5,7 @@ if($_POST['missionID']!='')
 {
 	$db = connectDB();
 	
+	//Get mission images
 	$stmt = $db->prepare("select imageuri from missionimage ".
 	"where missionID = ?");
 	$stmt->bind_param('i', $_POST['missionID']);
@@ -17,7 +18,7 @@ if($_POST['missionID']!='')
 
 	$stmt->close();
 	
-	
+	//Get total number of images
 	$stmt = $db->prepare("select COUNT(imageuri) from missionimage ".
 	"where missionID = ?");
 	$stmt->bind_param('i', $_POST['missionID']);

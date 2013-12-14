@@ -6,12 +6,11 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	$result['OK'] = 1;
 	$result['error'] = "No error";
 	
+	//Find locations for this mission that the user is in rage of, uses spherical harversine distance
 	$stmt = $db->prepare("select location.lat, location.lng, missionlocation.locationOrder, location.radius ".
-	//"from location, missionlocation, mission where missionlocation.missionID=? and mission.id=? and missionlocation.locationID=location.id and mission.photo=? and ".
 	"from location, missionlocation, mission where missionlocation.missionID=? and mission.id=? and missionlocation.locationID=location.id and ".
 	"(ACOS(SIN(?)*latsin+COS(?)*latcos*COS(radians(lng-?)))*6371000) < location.radius ORDER BY missionlocation.locationOrder ASC");
 	
-	//$stmt->bind_param('iiiddd', $_POST['missionID'], $_POST['missionID'], $photo, $latRadians, $latRadians, $_POST['lng']);
 	$stmt->bind_param('iiddd', $_POST['missionID'], $_POST['missionID'], $latRadians, $latRadians, $_POST['lng']);
 	$photo  = intval($_POST['photo']);
 	$latRadians = deg2rad($_POST['lat']);
@@ -92,19 +91,8 @@ if($_POST['lat']!='' && $_POST['lng']!='' && $_POST['missionID']!='' && $_POST['
 	$result['progress'] = $count;
 	$result['totalLocations'] = $totalLocationNUM;
 	
-	/*
-	$result['update']=1;
-	$result['progress']=1;
-	$result['alreadyFound'] = 0;
-	$result['locations'][] = array(
-	'lat' => $_POST['lat'],
-	'lng' => $_POST['lng'],
-	'radius' => '1000',
-	'order' => 1
-	);
-	*/
 	
-	
+	//Save checking debugging information
 	$stmt = $db->prepare("insert ignore into checkin(userID, missionID, lat, lng, json, beforeProgress, afterProgress) values (?, ?, ?, ?, ?, ?, ?)");
 	$stmt->bind_param('iiddsii', $_POST['userID'], $_POST['missionID'], $_POST['lat'],$_POST['lng'], $debugjson, $oldProgress, $progress);
 	$debugjson = '['.json_encode($result).']';

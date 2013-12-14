@@ -1,4 +1,5 @@
 <?
+//Generates a 404 page body for a file path
 function get404($path)
 {
 	$pre404 = "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
@@ -16,11 +17,13 @@ $post404 = " was not found on this server.</p>
 	return $pre404.$path.$post404;
 }
 
+//Generates a 404 page body for the calling script
 function getMy404()
 {
 	return get404($_SERVER['PHP_SELF']);
 }
 
+//Generates a 404 error for the specified script
 function dropDirectRequest($me)
 {
 	if(basename($me)===basename($_SERVER['PHP_SELF']))
@@ -30,6 +33,7 @@ function dropDirectRequest($me)
 	}
 }
 
+//Copies an assoiciatve array
 function copyArray($arr)
 {
 	$keys = array_keys($arr);
@@ -40,12 +44,14 @@ function copyArray($arr)
 	return $return;
 }
 
+//Renames a key for an assoiciatve array
 function renameKey(&$arr, $oldKey, $newKey)
 {
 	$arr[$newKey] = $arr[$oldKey];
 	unset($arr[$oldKey]);
 }
 
+//Sends cache control headers to browser, this are all the no-cache headers I could find
 function noCache()
 {
 	if(!headers_sent())
@@ -58,6 +64,7 @@ function noCache()
 	}
 }
 
+//do not allow users to navigate to this file
 dropDirectRequest(__FILE__);
 
 ?>

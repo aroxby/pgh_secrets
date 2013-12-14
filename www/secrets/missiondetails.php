@@ -1,11 +1,11 @@
 <?php
-//tpye neightborhood
 include($_SERVER['DOCUMENT_ROOT']."/scripts/db.php");
 
 if($_POST['missionID']!='')
 {
 	$db = connectDB();
 	
+	//Get base mission information
 	$stmt = $db->prepare("select name, type, neighborhood, description, showLocations from mission ".
 	"where ((year(startDate)<=0) or (year(startDate)>0 and now() between startDate and endDate)) and mission.id=?");
 	$stmt->bind_param('i', $_POST['missionID']);
@@ -17,6 +17,7 @@ if($_POST['missionID']!='')
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
+	//Get related locations
 	$stmt = $db->prepare("select missionlocation.locationOrder, ".
 	"location.lat, location.lng, location.radius, location.name from location, missionlocation ".
 	"where missionlocation.missionID=? and missionlocation.locationID=location.id ".
@@ -32,6 +33,7 @@ if($_POST['missionID']!='')
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	
+	//Get related images
 	$stmt = $db->prepare("select photo from mission where id = ?");
 	$stmt->bind_param('i', $_POST['missionID']);
 	$stmt->execute();
@@ -41,6 +43,9 @@ if($_POST['missionID']!='')
 	$result['photo'] = $photo;
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	//Calculate mission 'stars'
 	
 	$result['numStars'] = 0;
 	
